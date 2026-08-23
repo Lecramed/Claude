@@ -56,7 +56,7 @@
     <div class="container about-hero">
       <div>
         <span class="eyebrow reveal">Ons verhaal</span>
-        <h1 class="reveal" style="--i:1">Van rustige wandelingen tot een klein atelier vol verf</h1>
+        <h1 class="mask-heading"><span class="mask-heading__inner">Van rustige wandelingen tot een klein atelier vol verf</span></h1>
         <p class="lede reveal" style="--i:2; margin-top:18px">KEIGOED begon als hobby: tijdens wandelingen langs de rivier stenen zoeken en thuis beschilderen. Wat begon met een handvol steentjes op de vensterbank, groeide uit tot een klein atelier waar we elke dag met plezier nieuwe motieven bedenken.</p>
         <p class="lede reveal" style="--i:3">Geen twee stenen zijn hetzelfde. Elke oneffenheid, elke vorm wordt onderdeel van het ontwerp — dat maakt elk stukje echt van jou.</p>
       </div>
@@ -165,7 +165,7 @@
     if (el) {
       const picks = KEIGOED.PRODUCTS.slice(0, 8);
       el.innerHTML = picks
-        .map((p, i) => `<div class="gallery-item reveal" style="--i:${i % 8}" data-lightbox-item>${p.svg}</div>`)
+        .map((p, i) => `<div class="gallery-item reveal" style="--i:${i % 8}" data-lightbox-item data-cursor-text="Bekijk">${p.svg}</div>`)
         .join("");
     }
   });

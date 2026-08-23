@@ -54,8 +54,28 @@ body.has-cursor { cursor: none; }
 body.has-cursor a, body.has-cursor button { cursor: none; }
 .cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; will-change: transform; }
 .cursor-dot { width: 8px; height: 8px; margin: -4px; border-radius: 50%; background: var(--terracotta); }
-.cursor-ring { width: 34px; height: 34px; margin: -17px; border-radius: 50%; border: 1.5px solid var(--terracotta); transition: width .2s, height .2s, margin .2s, opacity .2s, background .2s; opacity: .6; }
+.cursor-ring { width: 34px; height: 34px; margin: -17px; border-radius: 50%; border: 1.5px solid var(--terracotta); transition: width .25s var(--ease-bounce), height .25s var(--ease-bounce), margin .25s var(--ease-bounce), opacity .2s, background .2s; opacity: .6; display: flex; align-items: center; justify-content: center; }
 .cursor-ring.is-active { width: 52px; height: 52px; margin: -26px; background: rgba(226, 112, 74, .12); opacity: 1; }
+.cursor-ring.has-label { width: 92px; height: 92px; margin: -46px; background: var(--ink); border-color: var(--ink); opacity: 1; }
+.cursor-ring__label { font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: .78rem; color: var(--cream); white-space: nowrap; opacity: 0; transform: scale(.6); transition: opacity .2s ease, transform .2s var(--ease-bounce); }
+.cursor-ring.has-label .cursor-ring__label { opacity: 1; transform: scale(1); }
+
+/* filmkorrel-textuur over de hele site */
+.grain-overlay {
+  position: fixed; inset: -10%; z-index: 3; pointer-events: none;
+  opacity: .045; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grainShift 1s steps(6) infinite;
+}
+@keyframes grainShift {
+  0% { transform: translate(0,0); } 20% { transform: translate(-4%,3%); }
+  40% { transform: translate(3%,-5%); } 60% { transform: translate(-3%,5%); }
+  80% { transform: translate(5%,2%); } 100% { transform: translate(0,0); }
+}
+@media (max-width: 720px) { .grain-overlay { display: none; } }
+
+.magnetic { will-change: transform; }
 
 /* ---------- 2. Typografie ---------- */
 h1, h2, h3, .display { font-family: "Baloo 2", "Quicksand", sans-serif; font-weight: 700; letter-spacing: -0.01em; }
@@ -65,6 +85,11 @@ h3 { font-size: 1.2rem; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; text-transform: uppercase; font-size: .78rem; letter-spacing: .12em; color: var(--terracotta-dark); }
 .eyebrow::before { content: ""; width: 20px; height: 2px; background: var(--terracotta); border-radius: 2px; }
 .lede { color: var(--ink-soft); font-size: 1.08rem; line-height: 1.6; max-width: 60ch; }
+
+/* mask-reveal: kop schuift van achter een masker omhoog */
+.mask-heading { display: block; overflow: hidden; }
+.mask-heading__inner { display: block; transform: translateY(112%); transition: transform 1s cubic-bezier(.16,1,.3,1); }
+.mask-heading.in-view .mask-heading__inner { transform: translateY(0); }
 
 /* ---------- 3. Preloader ---------- */
 .preloader { position: fixed; inset: 0; z-index: 10000; background: var(--cream); display: flex; align-items: center; justify-content: center; transition: opacity .8s ease; }
@@ -120,6 +145,8 @@ h3 { font-size: 1.2rem; }
 /* ---------- 6. Hero ---------- */
 .hero { padding: 60px 0 120px; overflow: hidden; position: relative; }
 .hero__inner { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; position: relative; z-index: 2; }
+.hero__title.mask-heading { padding-bottom: .3em; margin-bottom: -.3em; }
+.hero__watermark { position: absolute; top: 46%; left: 50%; transform: translate(-50%, -50%); z-index: 1; font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: clamp(6rem, 22vw, 15rem); color: transparent; -webkit-text-stroke: 1.5px rgba(47,42,38,.08); white-space: nowrap; pointer-events: none; user-select: none; letter-spacing: -0.02em; }
 .hero__title .accent { color: var(--terracotta); position: relative; white-space: nowrap; }
 .hero__title .accent svg { position: absolute; left: -2%; bottom: -0.18em; width: 104%; height: 0.35em; z-index: -1; }
 .hero__title .accent path { stroke-dasharray: 340; stroke-dashoffset: 340; animation: drawUnderline 1s var(--ease-bounce) .6s forwards; }
@@ -143,6 +170,7 @@ h3 { font-size: 1.2rem; }
 @keyframes floatSlow { 0%,100% { transform: translateY(0) rotate(0deg);} 50% { transform: translateY(-16px) rotate(3deg);} }
 
 .marquee { border-top: 2px solid rgba(47,42,38,.08); border-bottom: 2px solid rgba(47,42,38,.08); background: var(--ink); color: var(--cream); padding: 16px 0; overflow: hidden; }
+.marquee--tilt { transform: rotate(-1.4deg) scale(1.04); margin: 18px 0; box-shadow: var(--shadow-lift); position: relative; z-index: 4; }
 .marquee__track { display: flex; width: max-content; gap: 48px; animation: marqueeScroll 26s linear infinite; }
 .marquee__track span { font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 1.1rem; white-space: nowrap; opacity: .9; }
 @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }

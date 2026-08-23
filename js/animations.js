@@ -47,7 +47,7 @@
 
   /* ---------- scroll reveal ---------- */
   function initReveal() {
-    const els = document.querySelectorAll(".reveal");
+    const els = document.querySelectorAll(".reveal, .mask-heading");
     if (!els.length) return;
     if (reduceMotion) {
       els.forEach((el) => el.classList.add("in-view"));
@@ -127,13 +127,16 @@
     });
   }
 
-  /* ---------- custom cursor met vertraagd volgpuntje ---------- */
+  /* ---------- custom cursor met vertraagd volgpuntje + hover-labels ---------- */
   function initCustomCursor() {
     if (isTouch || reduceMotion) return;
     const dot = document.createElement("div");
     const ring = document.createElement("div");
+    const label = document.createElement("span");
+    label.className = "cursor-ring__label";
     dot.className = "cursor-dot";
     ring.className = "cursor-ring";
+    ring.appendChild(label);
     document.body.append(dot, ring);
     let mx = 0, my = 0, rx = 0, ry = 0;
     window.addEventListener("mousemove", (e) => {
@@ -149,10 +152,99 @@
       ring.style.transform = `translate(${rx}px, ${ry}px)`;
       requestAnimationFrame(loop);
     })();
-    document.querySelectorAll("a, button, .product-card").forEach((el) => {
-      el.addEventListener("mouseenter", () => ring.classList.add("is-active"));
-      el.addEventListener("mouseleave", () => ring.classList.remove("is-active"));
+
+    /* event-delegatie: werkt ook voor kaarten/knoppen die pas later worden gerenderd */
+    document.body.addEventListener("mouseover", (e) => {
+      const labelTarget = e.target.closest("[data-cursor-text]");
+      if (labelTarget) {
+        label.textContent = labelTarget.dataset.cursorText;
+        ring.classList.add("has-label");
+        ring.classList.remove("is-active");
+        return;
+      }
+      if (e.target.closest("a, button, .product-card")) ring.classList.add("is-active");
     });
+    document.body.addEventListener("mouseout", (e) => {
+      const related = e.relatedTarget;
+      if (!related || !related.closest || !related.closest("[data-cursor-text]")) {
+        if (e.target.closest("[data-cursor-text]")) ring.classList.remove("has-label");
+      }
+      if (!related || !related.closest || !related.closest("a, button, .product-card")) {
+        ring.classList.remove("is-active");
+      }
+    });
+  }
+
+  /* ---------- magnetische knoppen ---------- */
+  function initMagnetic() {
+    if (isTouch || reduceMotion) return;
+    document.querySelectorAll(".magnetic").forEach((el) => {
+      el.addEventListener("mousemove", (e) => {
+        const r = el.getBoundingClientRect();
+        const x = Math.max(-14, Math.min(14, (e.clientX - r.left - r.width / 2) * 0.22));
+        const y = Math.max(-10, Math.min(10, (e.clientY - r.top - r.height / 2) * 0.22));
+        el.style.transition = "transform .1s linear";
+        el.style.transform = `translate(${x}px, ${y}px) scale(1.04)`;
+      });
+      el.addEventListener("mouseleave", () => {
+        el.style.transition = "transform .5s var(--ease-bounce)";
+        el.style.transform = "translate(0,0) scale(1)";
+      });
+    });
+  }
+
+  /* ---------- filmkorrel-textuur ---------- */
+  function initGrain() {
+    if (document.querySelector(".grain-overlay")) return;
+    const grain = document.createElement("div");
+    grain.className = "grain-overlay";
+    grain.setAttribute("aria-hidden", "true");
+    document.body.appendChild(grain);
+  }
+
+  /* ---------- zachte "momentum" scroll op desktop (muiswiel) ---------- */
+  function initSmoothScroll() {
+    if (isTouch || reduceMotion) return;
+    let current = window.scrollY;
+    let target = current;
+    let raf = null;
+
+    function clampTarget(v) {
+      const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
+      return Math.min(Math.max(v, 0), max);
+    }
+    function loop() {
+      current += (target - current) * 0.12;
+      if (Math.abs(target - current) < 0.4) {
+        current = target;
+        window.scrollTo(0, current);
+        raf = null;
+        return;
+      }
+      window.scrollTo(0, current);
+      raf = requestAnimationFrame(loop);
+    }
+    window.addEventListener(
+      "wheel",
+      (e) => {
+        if (e.ctrlKey || e.target.closest(".cart-drawer__list, select")) return;
+        e.preventDefault();
+        target = clampTarget(target + e.deltaY);
+        if (!raf) raf = requestAnimationFrame(loop);
+      },
+      { passive: false }
+    );
+
+    /* volg scroll die niet van onszelf komt (toetsenbord, scrollbar, ankerlinks) */
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (raf) return;
+        current = window.scrollY;
+        target = current;
+      },
+      { passive: true }
+    );
   }
 
   /* ---------- fly-to-cart animatie ---------- */
@@ -238,6 +330,9 @@
     initHeroParallax();
     initTiltCards();
     initCustomCursor();
+    initMagnetic();
+    initGrain();
+    initSmoothScroll();
   });
 
   window.KEIGOED = window.KEIGOED || {};

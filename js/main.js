@@ -16,7 +16,7 @@
     return `
       <article class="product-card reveal" style="--i:${i % 8}">
         ${badgeHtml}
-        <a href="product.html?id=${p.id}" class="product-card__link">
+        <a href="product.html?id=${p.id}" class="product-card__link" data-cursor-text="Bekijk →">
           <div class="product-card__image">${p.svg}</div>
           <div class="product-card__body">
             <span class="product-card__category">${p.category}</span>
