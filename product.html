@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — KEIGOED</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><text y=%2232%22 font-size=%2232%22>🪨</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav" data-nav>
+  <div class="container nav__bar">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><svg viewBox="0 0 40 40"><ellipse cx="20" cy="34" rx="14" ry="3" fill="#2f2a26" opacity="0.15"/><path d="M8,26 C4,18 8,8 20,7 C32,8 37,18 33,27 C29,35 12,35 8,26 Z" fill="#e2704a"/><circle cx="20" cy="19" r="4" fill="#f4c95d"/><circle cx="13" cy="16" r="2" fill="#fff"/><circle cx="27" cy="16" r="2" fill="#fff"/><circle cx="13" cy="24" r="2" fill="#fff"/><circle cx="27" cy="24" r="2" fill="#fff"/></svg></span>
+      KEIGOED
+    </a>
+    <nav class="nav__menu" data-menu>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">Over ons</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="cart-toggle" data-cart-toggle aria-label="Winkelwagen">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" data-cart-count>0</span>
+      </button>
+      <button class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="cart-drawer" data-cart-drawer>
+  <div class="cart-drawer__backdrop"></div>
+  <div class="cart-drawer__panel">
+    <div class="cart-drawer__head">
+      <h3>Jouw winkelwagen</h3>
+      <button class="cart-drawer__close" data-cart-close aria-label="Sluiten">✕</button>
+    </div>
+    <div class="cart-drawer__list" data-cart-list></div>
+    <p class="cart-empty-msg" data-cart-empty hidden>Je winkelwagen is nog leeg. Tijd om een steentje te kiezen! 🎨</p>
+    <div class="cart-drawer__foot">
+      <div class="cart-drawer__totalrow"><span>Totaal</span><span data-cart-total>€ 0,00</span></div>
+      <a href="cart.html" class="btn btn--primary" style="width:100%">Naar winkelwagen</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="product-detail" data-product-detail></div>
+  </div>
+
+  <svg class="brush-divider" viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="M0,20 Q300,40 600,20 T1200,20"/></svg>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow reveal">Ook leuk</span>
+          <h2 class="reveal" style="--i:1">Bekijk ook eens</h2>
+        </div>
+      </div>
+      <div class="product-grid" data-related-products></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__col">
+        <a href="index.html" class="brand">
+          <span class="brand__mark"><svg viewBox="0 0 40 40"><path d="M8,26 C4,18 8,8 20,7 C32,8 37,18 33,27 C29,35 12,35 8,26 Z" fill="#e2704a"/><circle cx="20" cy="19" r="4" fill="#f4c95d"/></svg></span>
+          KEIGOED
+        </a>
+        <p class="lede" style="margin-top:14px">Handbeschilderde stenen, met liefde gemaakt in een klein atelier. Elk stukje is uniek — net als jij.</p>
+        <div class="socials" style="margin-top:18px">
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+          <a href="#" aria-label="Facebook">👍</a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="shop.html?categorie=Dieren">Dieren</a></li>
+          <li><a href="shop.html?categorie=Mandala%27s">Mandala's</a></li>
+          <li><a href="shop.html?categorie=Natuur">Natuur</a></li>
+          <li><a href="shop.html?categorie=Cadeaustenen">Cadeaustenen</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="about.html">Over ons</a></li>
+          <li><a href="contact.html">Veelgestelde vragen</a></li>
+          <li><a href="cart.html">Winkelwagen</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <ul>
+          <li>hallo@keigoed.nl</li>
+          <li>+31 6 1234 5678</li>
+          <li>Ma–Vr, 9:00–17:00</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year></span> KEIGOED — Alle rechten voorbehouden</span>
+      <span>Gemaakt met 🎨 en veel geduld</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

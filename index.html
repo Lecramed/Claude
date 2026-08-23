@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KEIGOED — Handbeschilderde stenen webshop</title>
+<meta name="description" content="KEIGOED verkoopt handbeschilderde stenen vol karakter: dieren, mandala's, natuur en cadeaustenen. Uniek, duurzaam en met liefde gemaakt.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><text y=%2232%22 font-size=%2232%22>🪨</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="preloader" data-preloader>
+  <div class="preloader__stone">
+    <svg viewBox="0 0 200 200"><ellipse cx="102" cy="180" rx="66" ry="10" fill="#2f2a26" opacity="0.1"/><path d="M40,150 C20,130 20,90 45,65 C60,45 90,30 120,35 C155,40 180,65 178,100 C176,135 150,160 115,165 C85,169 60,168 40,150 Z" fill="#e3dccd" stroke="#c9bea6" stroke-width="2"/><circle cx="100" cy="100" r="30" fill="#e2704a"/><circle cx="100" cy="100" r="14" fill="#f4c95d"/></svg>
+    <div class="preloader__brush"></div>
+  </div>
+</div>
+
+<header class="nav" data-nav>
+  <div class="container nav__bar">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><svg viewBox="0 0 40 40"><ellipse cx="20" cy="34" rx="14" ry="3" fill="#2f2a26" opacity="0.15"/><path d="M8,26 C4,18 8,8 20,7 C32,8 37,18 33,27 C29,35 12,35 8,26 Z" fill="#e2704a"/><circle cx="20" cy="19" r="4" fill="#f4c95d"/><circle cx="13" cy="16" r="2" fill="#fff"/><circle cx="27" cy="16" r="2" fill="#fff"/><circle cx="13" cy="24" r="2" fill="#fff"/><circle cx="27" cy="24" r="2" fill="#fff"/></svg></span>
+      KEIGOED
+    </a>
+    <nav class="nav__menu" data-menu>
+      <a href="index.html" class="is-active">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">Over ons</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="cart-toggle" data-cart-toggle aria-label="Winkelwagen">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" data-cart-count>0</span>
+      </button>
+      <button class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="cart-drawer" data-cart-drawer>
+  <div class="cart-drawer__backdrop"></div>
+  <div class="cart-drawer__panel">
+    <div class="cart-drawer__head">
+      <h3>Jouw winkelwagen</h3>
+      <button class="cart-drawer__close" data-cart-close aria-label="Sluiten">✕</button>
+    </div>
+    <div class="cart-drawer__list" data-cart-list></div>
+    <p class="cart-empty-msg" data-cart-empty hidden>Je winkelwagen is nog leeg. Tijd om een steentje te kiezen! 🎨</p>
+    <div class="cart-drawer__foot">
+      <div class="cart-drawer__totalrow"><span>Totaal</span><span data-cart-total>€ 0,00</span></div>
+      <a href="cart.html" class="btn btn--primary" style="width:100%">Naar winkelwagen</a>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section class="hero" data-parallax-hero>
+    <div class="container hero__inner">
+      <div>
+        <span class="eyebrow reveal">Handgeschilderd · Uniek · Duurzaam</span>
+        <h1 class="hero__title reveal" style="--i:1">Kunst op&nbsp;een&nbsp;steen,<br>zo <span class="accent">keigoed<svg viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M4,14 Q100,2 196,14" stroke="#f4c95d" stroke-width="8" fill="none"/></svg></span> gemaakt.</h1>
+        <p class="lede reveal" style="--i:2">Elke steen in onze webshop is met de hand gezocht, geschuurd en beschilderd door onze kunstenaars. Geen twee stenen zijn hetzelfde — precies zoals jij.</p>
+        <div class="hero__actions reveal" style="--i:3">
+          <a href="shop.html" class="btn btn--primary">Bekijk de collectie</a>
+          <a href="about.html" class="btn btn--ghost">Ons verhaal</a>
+        </div>
+        <div class="hero__stats reveal" style="--i:4">
+          <div><strong>2.400+</strong><span>tevreden verzamelaars</span></div>
+          <div><strong>100%</strong><span>met de hand beschilderd</span></div>
+          <div><strong>4,9★</strong><span>gemiddelde beoordeling</span></div>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__blob"></div>
+        <div class="hero__stone hero__stone--1" data-depth="30">
+          <div class="hero__stone-inner"><svg viewBox="0 0 200 200"><ellipse cx="102" cy="180" rx="66" ry="10" fill="#2f2a26" opacity="0.1"/><path d="M35,120 C25,95 35,60 65,45 C95,30 140,35 160,60 C180,85 175,125 150,145 C125,165 85,168 60,155 C45,147 42,140 35,120 Z" fill="#d7dbd6" stroke="#b9c0b8" stroke-width="2"/><rect x="30" y="30" width="140" height="140" clip-path="circle(70px at 100 100)" fill="#2a2f4a"/><circle cx="112" cy="88" r="26" fill="#f4e9c9" clip-path="circle(70px at 100 100)"/><circle cx="122" cy="80" r="22" fill="#2a2f4a" clip-path="circle(70px at 100 100)"/></svg></div>
+        </div>
+        <div class="hero__stone hero__stone--2" data-depth="50">
+          <div class="hero__stone-inner"><svg viewBox="0 0 200 200"><ellipse cx="102" cy="180" rx="66" ry="10" fill="#2f2a26" opacity="0.1"/><path d="M30,140 C25,110 40,85 65,70 C90,55 130,50 155,65 C175,77 182,105 172,130 C162,155 130,168 95,168 C65,168 38,162 30,140 Z" fill="#e3dccd" stroke="#c9bea6" stroke-width="2"/><circle cx="100" cy="112" r="34" fill="#c98a4b"/><path d="M70,105 Q100,140 130,105 Q124,130 100,132 Q76,130 70,105 Z" fill="#5a3d2b"/><circle cx="86" cy="88" r="14" fill="#fff"/><circle cx="114" cy="88" r="14" fill="#fff"/><circle cx="86" cy="88" r="6" fill="#2f2a26"/><circle cx="114" cy="88" r="6" fill="#2f2a26"/></svg></div>
+        </div>
+        <div class="hero__stone hero__stone--3" data-depth="20">
+          <div class="hero__stone-inner"><svg viewBox="0 0 200 200"><ellipse cx="102" cy="180" rx="66" ry="10" fill="#2f2a26" opacity="0.1"/><path d="M40,150 C20,130 20,90 45,65 C60,45 90,30 120,35 C155,40 180,65 178,100 C176,135 150,160 115,165 C85,169 60,168 40,150 Z" fill="#e6d9bd" stroke="#cdb98f" stroke-width="2"/><circle cx="100" cy="100" r="60" fill="none" stroke="#e0793a" stroke-width="2.5"/><circle cx="100" cy="100" r="45" fill="none" stroke="#f4c95d" stroke-width="2"/><circle cx="100" cy="100" r="13" fill="#e0793a"/><circle cx="100" cy="100" r="6" fill="#c9503c"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee__track">
+      <span>🎨 Handbeschilderd</span><span>🌿 Duurzaam verpakt</span><span>🪨 100% unieke stenen</span><span>💝 Perfect cadeau</span><span>🚚 Gratis verzending v.a. €35</span>
+      <span>🎨 Handbeschilderd</span><span>🌿 Duurzaam verpakt</span><span>🪨 100% unieke stenen</span><span>💝 Perfect cadeau</span><span>🚚 Gratis verzending v.a. €35</span>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow reveal">Publieksfavorieten</span>
+          <h2 class="reveal" style="--i:1">Onze meest geliefde stenen</h2>
+        </div>
+        <a href="shop.html" class="btn btn--light reveal" style="--i:2">Bekijk alles →</a>
+      </div>
+      <div class="product-grid" data-featured-products></div>
+    </div>
+  </section>
+
+  <svg class="brush-divider" viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="M0,20 Q300,40 600,20 T1200,20"/></svg>
+
+  <section class="section section--soft">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow reveal">Hoe het ontstaat</span>
+          <h2 class="reveal" style="--i:1">Van rivierkei tot klein kunstwerk</h2>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step reveal reveal--scale" style="--i:1">
+          <div class="step__num">1</div>
+          <h3>Zoeken &amp; schuren</h3>
+          <p>We zoeken gladde, natuurlijke stenen uit en reinigen ze zorgvuldig, zodat de verf er straks perfect op hecht.</p>
+        </div>
+        <div class="step reveal reveal--scale" style="--i:2">
+          <div class="step__num">2</div>
+          <h3>Met de hand beschilderd</h3>
+          <p>Met acrylverf en een fijn penseel schildert onze kunstenaar elk motief helemaal zelf — geen twee stenen zijn identiek.</p>
+        </div>
+        <div class="step reveal reveal--scale" style="--i:3">
+          <div class="step__num">3</div>
+          <h3>Vernist &amp; verzonden</h3>
+          <p>Een mat, weerbestendig vernislaagje beschermt de tekening, waarna jouw steentje plasticvrij verpakt naar je toe reist.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="brush-divider" viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="M0,20 Q300,0 600,20 T1200,20"/></svg>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <span class="eyebrow reveal">Wat klanten zeggen</span>
+          <h2 class="reveal" style="--i:1">Keigoede reacties</h2>
+        </div>
+      </div>
+      <div class="testimonials">
+        <div class="testimonial reveal" style="--i:1">
+          <div class="testimonial__stars">★★★★★</div>
+          <p>"Ik verzamel er inmiddels tien! Elke steen is een klein kunstwerkje en de kwaliteit van de verf is echt top."</p>
+          <div class="testimonial__author">— Marieke V.</div>
+        </div>
+        <div class="testimonial reveal" style="--i:2">
+          <div class="testimonial__stars">★★★★★</div>
+          <p>"Als cadeau enorm gewaardeerd. De verpakking was al een belevenis op zich, heel persoonlijk gedaan."</p>
+          <div class="testimonial__author">— Tom B.</div>
+        </div>
+        <div class="testimonial reveal" style="--i:3">
+          <div class="testimonial__stars">★★★★★</div>
+          <p>"De mandala-steen staat prachtig in mijn vensterbank. Zoveel details voor zo'n klein steentje!"</p>
+          <div class="testimonial__author">— Fenna D.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="newsletter reveal">
+        <div>
+          <h2>Blijf op de hoogte</h2>
+          <p>Nieuwe collecties, beperkte oplages en 10% korting op je eerste bestelling.</p>
+        </div>
+        <div>
+          <form class="newsletter-form" data-newsletter-form>
+            <input type="email" required placeholder="jouw@email.nl" aria-label="E-mailadres">
+            <button type="submit" class="btn btn--primary">Aanmelden</button>
+          </form>
+          <p class="newsletter-msg" data-newsletter-msg hidden>Bedankt! Check je inbox voor je kortingscode. 🎉</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__col">
+        <a href="index.html" class="brand">
+          <span class="brand__mark"><svg viewBox="0 0 40 40"><path d="M8,26 C4,18 8,8 20,7 C32,8 37,18 33,27 C29,35 12,35 8,26 Z" fill="#e2704a"/><circle cx="20" cy="19" r="4" fill="#f4c95d"/></svg></span>
+          KEIGOED
+        </a>
+        <p class="lede" style="margin-top:14px">Handbeschilderde stenen, met liefde gemaakt in een klein atelier. Elk stukje is uniek — net als jij.</p>
+        <div class="socials" style="margin-top:18px">
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="Pinterest">📌</a>
+          <a href="#" aria-label="Facebook">👍</a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="shop.html?categorie=Dieren">Dieren</a></li>
+          <li><a href="shop.html?categorie=Mandala%27s">Mandala's</a></li>
+          <li><a href="shop.html?categorie=Natuur">Natuur</a></li>
+          <li><a href="shop.html?categorie=Cadeaustenen">Cadeaustenen</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="about.html">Over ons</a></li>
+          <li><a href="contact.html">Veelgestelde vragen</a></li>
+          <li><a href="cart.html">Winkelwagen</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <ul>
+          <li>hallo@keigoed.nl</li>
+          <li>+31 6 1234 5678</li>
+          <li>Ma–Vr, 9:00–17:00</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year></span> KEIGOED — Alle rechten voorbehouden</span>
+      <span>Gemaakt met 🎨 en veel geduld</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
