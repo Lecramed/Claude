@@ -85,27 +85,43 @@
     paths.forEach((p) => io.observe(p));
   }
 
-  /* ---------- hero parallax (mousemove) ---------- */
+  /* ---------- hero parallax (muisbeweging + scroll-overgang) ---------- */
   function initHeroParallax() {
     const hero = document.querySelector("[data-parallax-hero]");
-    if (!hero || isTouch || reduceMotion) return;
+    if (!hero || reduceMotion) return;
     const layers = hero.querySelectorAll("[data-depth]");
+    let mx = 0, my = 0;
     let raf = null;
-    hero.addEventListener("mousemove", (e) => {
-      const rect = hero.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        layers.forEach((layer) => {
-          const depth = parseFloat(layer.dataset.depth) || 0;
-          layer.style.transform = `translate3d(${x * depth}px, ${y * depth}px, 0)`;
-        });
+
+    function render() {
+      raf = null;
+      const heroRect = hero.getBoundingClientRect();
+      layers.forEach((layer) => {
+        const depth = parseFloat(layer.dataset.depth) || 0;
+        const scrollY = heroRect.top * (depth / 260);
+        layer.style.transform = `translate3d(${mx * depth}px, ${my * depth + scrollY}px, 0)`;
       });
-    });
-    hero.addEventListener("mouseleave", () => {
-      layers.forEach((layer) => (layer.style.transform = "translate3d(0,0,0)"));
-    });
+    }
+    function requestRender() {
+      if (!raf) raf = requestAnimationFrame(render);
+    }
+
+    if (!isTouch) {
+      hero.addEventListener("mousemove", (e) => {
+        const rect = hero.getBoundingClientRect();
+        mx = (e.clientX - rect.left) / rect.width - 0.5;
+        my = (e.clientY - rect.top) / rect.height - 0.5;
+        requestRender();
+      });
+      hero.addEventListener("mouseleave", () => {
+        mx = 0;
+        my = 0;
+        requestRender();
+      });
+    }
+    window.addEventListener("scroll", requestRender, { passive: true });
+    window.addEventListener("resize", requestRender);
+    requestRender();
   }
 
   /* ---------- 3D tilt op productkaarten ---------- */
@@ -214,14 +230,21 @@
       return Math.min(Math.max(v, 0), max);
     }
     function loop() {
-      current += (target - current) * 0.12;
-      if (Math.abs(target - current) < 0.4) {
-        current = target;
-        window.scrollTo(0, current);
+      /* iets anders (ankerlink, "terug naar boven", ...) nam de scroll over: niet tegenwerken */
+      if (Math.abs(window.scrollY - current) > 2) {
+        current = window.scrollY;
+        target = current;
         raf = null;
         return;
       }
-      window.scrollTo(0, current);
+      current += (target - current) * 0.12;
+      if (Math.abs(target - current) < 0.4) {
+        current = target;
+        window.scrollTo({ top: current, left: 0, behavior: "instant" });
+        raf = null;
+        return;
+      }
+      window.scrollTo({ top: current, left: 0, behavior: "instant" });
       raf = requestAnimationFrame(loop);
     }
     window.addEventListener(
