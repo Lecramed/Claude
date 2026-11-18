@@ -17,6 +17,7 @@
      --max <n>        max. aantal pagina's (standaard 80)
      --keep-query <a,b>  query-parameters die een aparte pagina maken (standaard: id)
      --exclude <pad,pad> paden die worden overgeslagen, bv. /webwinkel (incl. alles eronder)
+     --exclude-pattern <regex>  paden die op dit patroon lijken worden overgeslagen, bv. "-(a\\d{4,6}|\\d{5})$"
 =================================================================== */
 "use strict";
 
@@ -289,8 +290,11 @@ function latestRunBefore(currentId) {
   /* eigen uitsluitingen, bv. --exclude /webwinkel (productoverzichten en productpagina's overslaan) */
   const excludes = String(args.exclude || "").split(",").map((s) => s.trim()).filter(Boolean).map((s) => (s.startsWith("/") ? s : "/" + s));
   if (excludes.length) console.log(`overgeslagen: ${excludes.join(", ")}`);
+  const excludeRe = args["exclude-pattern"] ? new RegExp(args["exclude-pattern"]) : null;
+  if (excludeRe) console.log(`overgeslagen patroon: ${excludeRe}`);
   const allowed = (u) => {
     const x = new URL(u);
+    if (excludeRe && excludeRe.test(x.pathname.replace(/\/$/, ""))) return false;
     if (excludes.some((e) => x.pathname === e || x.pathname.startsWith(e.replace(/\/$/, "") + "/"))) return false;
     return !disallow.some((re) => re.test(x.pathname + x.search));
   };
@@ -369,7 +373,7 @@ function latestRunBefore(currentId) {
   const run = {
     id: runId, date: now.toISOString(), base: args.url ? baseUrl : "(lokaal) " + path.relative(REPO_ROOT, root || ".") || ".",
     label: args.label || (git ? `${git.sha} — ${git.msg}` : baseUrl),
-    git, viewport: VIEWPORT, excludes: String(args.exclude || "").split(",").filter(Boolean), previous: prevId, removed, pages
+    git, viewport: VIEWPORT, excludes: String(args.exclude || "").split(",").filter(Boolean), excludePattern: args["exclude-pattern"] || null, previous: prevId, removed, pages
   };
   fs.writeFileSync(path.join(runDir, "run.json"), JSON.stringify(run, null, 2));
   console.log(`\nMeting opgeslagen: ${path.relative(REPO_ROOT, runDir)}  (${pages.length} pagina's${prevId ? `, vergeleken met ${prevId}` : ", eerste meting"})`);
