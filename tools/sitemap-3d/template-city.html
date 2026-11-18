@@ -73,7 +73,7 @@ button { font: inherit; color: inherit; }
 .touch > div { display: flex; gap: 10px; pointer-events: auto; }
 .touch button { width: 58px; height: 58px; border-radius: 50%; border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 80%, transparent); font-size: 20px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .touch button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
-@media (pointer: coarse) { .touch { display: flex; } .stage .hint { display: none; } .dash { bottom: 84px; } }
+@media (pointer: coarse) { .touch { display: flex; } .dash { bottom: 84px; } }
 .drive { justify-self: start; background: var(--accent); color: var(--surface); border: 0; border-radius: 8px; padding: 6px 12px; font-weight: 600; cursor: pointer; }
 .fails { font-size: 12px; color: var(--muted); }
 .err { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; color: var(--muted); }
@@ -157,7 +157,7 @@ td .t { display: inline-block; max-width: 300px; overflow: hidden; text-overflow
       </div>
       <canvas id="minimap" width="200" height="200" aria-label="Plattegrond; klik op een gebouw om erheen te rijden"></canvas>
       <div class="dash"><span id="speed" class="mono">0 km/u</span><span id="near" hidden></span></div>
-      <div class="hint">Klik op de stad en rijd met de pijltjes of WASD · Shift = turbo · Spatie = rem · C = kaart of achter de auto · scrollen = zoomen · R = terug naar start. Gebouwhoogte = paginagewicht, dakkleur = verschil met vorige meting.</div>
+      <div class="hint">Sleep om de kaart te verschuiven · knijp of scroll om te zoomen · tik op een gebouw voor details. Rijden: pijltjes/WASD of de knoppen · Shift = turbo · C = kaart of achter de auto · R = terug naar start. Gebouwhoogte = paginagewicht, dakkleur = verschil met vorige meting.</div>
       <div class="touch" aria-hidden="true">
         <div><button type="button" data-touch="left">◀</button><button type="button" data-touch="right">▶</button></div>
         <div><button type="button" data-touch="down">▼</button><button type="button" data-touch="up">▲</button></div>

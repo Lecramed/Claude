@@ -387,7 +387,7 @@ function driveTo(key) {
   const p = b.tower ? new THREE.Vector3(0, 0, PLAZA_R - 2) : b.world.clone().add(b.front.clone().multiplyScalar(SET + 2.5));
   state.x = p.x; state.z = p.z; state.speed = 0;
   state.heading = b.tower ? Math.PI : Math.atan2(-b.front.x, -b.front.z);
-  camState.snap = true;
+  camState.snap = true; camState.pan.set(0, 0, 0);
   window.selectPage(key, false);
   renderer.domElement.focus({ preventScroll: true });
 }
@@ -407,7 +407,7 @@ renderer.domElement.addEventListener("keydown", (e) => {
   const hint = stage.querySelector(".hint"); if (hint && KEYMAP[e.code]) hint.hidden = true;
   if (KEYMAP[e.code]) { keys.add(KEYMAP[e.code]); e.preventDefault(); }
   if (e.code === "KeyC") toggleCam();
-  if (e.code === "KeyR") { Object.assign(state, START, { speed: 0 }); camState.snap = true; }
+  if (e.code === "KeyR") { Object.assign(state, START, { speed: 0 }); camState.snap = true; camState.pan.set(0, 0, 0); }
 });
 renderer.domElement.addEventListener("keyup", (e) => { if (KEYMAP[e.code]) keys.delete(KEYMAP[e.code]); });
 renderer.domElement.addEventListener("blur", () => keys.clear());
@@ -419,34 +419,87 @@ document.querySelectorAll("[data-touch]").forEach((btn) => {
 });
 
 // standaard: schuin bovenaanzicht (kaart), C wisselt naar achter de auto
-const camState = { mode: "map", snap: true, zoom: 1.45 };
+const camState = { mode: "map", snap: true, zoom: 1.45, pan: new THREE.Vector3(), dragging: false };
 const btnCam = document.getElementById("btn-cam");
 function syncCamBtn() { btnCam.textContent = camState.mode === "map" ? "Achter de auto" : "Kaartweergave"; btnCam.setAttribute("aria-pressed", "false"); }
 function toggleCam() { camState.mode = camState.mode === "map" ? "chase" : "map"; syncCamBtn(); }
 syncCamBtn();
 btnCam.addEventListener("click", toggleCam);
 document.getElementById("btn-home").addEventListener("click", () => driveTo(root.key));
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
 renderer.domElement.addEventListener("wheel", (e) => {
   if (camState.mode !== "map") return;
-  e.preventDefault(); camState.zoom = Math.max(0.35, Math.min(2.6, camState.zoom * (e.deltaY > 0 ? 1.1 : 0.9)));
+  e.preventDefault(); camState.zoom = Math.max(0.35, Math.min(4, camState.zoom * (e.deltaY > 0 ? 1.1 : 0.9)));
 }, { passive: false });
 
-const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
-let downAt = null;
-renderer.domElement.addEventListener("pointerdown", (e) => { downAt = [e.clientX, e.clientY]; });
+/* slepen = kaart verschuiven (muis of één vinger), knijpen = zoomen (twee vingers) */
+const pointers = new Map();
+const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+function groundAt(cx, cy) {
+  const r = renderer.domElement.getBoundingClientRect();
+  const v = new THREE.Vector2(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(v, camera);
+  const out = new THREE.Vector3();
+  return ray.ray.intersectPlane(groundPlane, out) ? out : null;
+}
+let downAt = null, moved = false, pinch = null;
+renderer.domElement.addEventListener("pointerdown", (e) => {
+  renderer.domElement.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 1) { downAt = [e.clientX, e.clientY]; moved = false; }
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), zoom: camState.zoom }; moved = true;
+  }
+});
+renderer.domElement.addEventListener("pointermove", (e) => {
+  const prev = pointers.get(e.pointerId);
+  if (prev) {
+    if (!moved && downAt && Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 5) {
+      moved = true;
+      if (camState.mode !== "map") { camState.mode = "map"; syncCamBtn(); }
+      camState.dragging = true;
+      const hint = stage.querySelector(".hint"); if (hint) hint.hidden = true;
+    }
+    if (pointers.size >= 2 && pinch) {
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      const [a, b] = [...pointers.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d > 10) camState.zoom = Math.max(0.35, Math.min(4, pinch.zoom * (pinch.d / d)));
+      return;
+    }
+    if (moved && camState.mode === "map") {
+      const g0 = groundAt(prev.x, prev.y), g1 = groundAt(e.clientX, e.clientY);
+      if (g0 && g1) {
+        camState.pan.add(g0.sub(g1));
+        camState.pan.x = Math.max(bx0 - state.x, Math.min(bx1 - state.x, camState.pan.x));
+        camState.pan.z = Math.max(bz0 - state.z, Math.min(bz1 - state.z, camState.pan.z));
+        camState.snap = true; updateCamera(0);
+      }
+    }
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    return;
+  }
+  // zweven met de muis: aanwijscursor boven een gebouw
+  const r = renderer.domElement.getBoundingClientRect();
+  mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(mouse, camera);
+  renderer.domElement.style.cursor = ray.intersectObjects(pickables, false).length ? "pointer" : camState.mode === "map" ? "grab" : "default";
+});
+const endPointer = (e) => {
+  pointers.delete(e.pointerId);
+  if (pointers.size < 2) pinch = null;
+  if (pointers.size === 0) camState.dragging = false;
+};
+renderer.domElement.addEventListener("pointercancel", endPointer);
 renderer.domElement.addEventListener("pointerup", (e) => {
-  if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 5) return;
+  endPointer(e);
+  if (moved || !downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 5) return;
   const r = renderer.domElement.getBoundingClientRect();
   mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   ray.setFromCamera(mouse, camera);
   const hit = ray.intersectObjects(pickables, false)[0];
   if (hit) window.selectPage(hit.object.userData.key, false);
-});
-renderer.domElement.addEventListener("pointermove", (e) => {
-  const r = renderer.domElement.getBoundingClientRect();
-  mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-  ray.setFromCamera(mouse, camera);
-  renderer.domElement.style.cursor = ray.intersectObjects(pickables, false).length ? "pointer" : "default";
 });
 
 /* ---------- rijden ---------- */
@@ -503,8 +556,10 @@ function updateCamera(dt) {
     camera.fov = 38;
     // vaste kijkrichting (zuidoost → noordwest), zoals een kaart; de auto blijft in het midden
     const dist = 150 * camState.zoom;
-    want = new THREE.Vector3(state.x + dist * 0.42, dist * 0.74, state.z + dist * 0.62);
-    look = new THREE.Vector3(state.x, 0, state.z);
+    if (!camState.dragging && Math.abs(state.speed) > 1) camState.pan.multiplyScalar(Math.exp(-dt * 2.5)); // rijden = kaart volgt de auto weer
+    const fx = state.x + camState.pan.x, fz = state.z + camState.pan.z;
+    want = new THREE.Vector3(fx + dist * 0.42, dist * 0.74, fz + dist * 0.62);
+    look = new THREE.Vector3(fx, 0, fz);
   }
   camera.updateProjectionMatrix();
   if (camState.snap || reduce) { camPos.copy(want); camLook.copy(look); camState.snap = false; }
@@ -516,7 +571,8 @@ function updateLabels() {
   // alleen labels rond de auto (en van de gekozen pagina en de homepage), zoals een kaart die op zoomniveau filtert
   const far = camState.mode === "map" ? 70 * camState.zoom + 20 : 120;
   buildings.forEach((b) => {
-    const d = Math.hypot(b.world.x - state.x, b.world.z - state.z);
+    const cx = state.x + (camState.mode === "map" ? camState.pan.x : 0), cz = state.z + (camState.mode === "map" ? camState.pan.z : 0);
+    const d = Math.hypot(b.world.x - cx, b.world.z - cz);
     b.label.material.opacity = b.p.key === selected || b.tower ? 1 : Math.max(0, Math.min(1, (far - d) / 25));
     b.label.visible = b.label.material.opacity > 0.02;
   });
