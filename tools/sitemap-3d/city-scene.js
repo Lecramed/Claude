@@ -50,8 +50,17 @@ all.forEach((p) => {
   const par = p.parent && byKey.has(p.parent) ? p.parent : root.key;
   (kids.get(par) || kids.set(par, []).get(par)).push(p);
 });
-const sections = (kids.get(root.key) || []).slice().sort((a, b) => a.key.localeCompare(b.key));
 const descendants = (p) => { const out = []; const walk = (q) => (kids.get(q.key) || []).forEach((c) => { out.push(c); walk(c); }); walk(p); return out; };
+/* straten: door de rapportbouwer ingedeeld op URL-pad; anders één straat per sectie uit de linkboom */
+let sections;
+if (all.some((p) => p.street)) {
+  const g = new Map();
+  all.forEach((p) => { if (p === root || !p.street) return; const [k, name] = p.street; (g.get(k) || g.set(k, { key: k, name, list: [] }).get(k)).list.push(p); });
+  sections = [...g.values()].sort((a, b) => (a.key.startsWith("~") ? 1 : 0) - (b.key.startsWith("~") ? 1 : 0) || b.list.length - a.list.length || a.key.localeCompare(b.key));
+  sections.forEach((s) => s.list.sort((a, b) => a.key.length - b.key.length || a.key.localeCompare(b.key)));
+} else {
+  sections = (kids.get(root.key) || []).slice().sort((a, b) => a.key.localeCompare(b.key)).map((s) => ({ key: s.key, name: s.name || s.key, list: [s, ...descendants(s)] }));
+}
 
 const PLAZA_R = 46, ROAD_W = 13, LOT = 17, SET = 17; // park, straatbreedte, kavelafstand, afstand gebouw–as
 const GAP = 66; // afstand tussen twee dwarsstraten
@@ -65,7 +74,7 @@ sections.forEach((s, i) => {
   const sideX = i % 2 === 0 ? 1 : -1;
   const k = sideX > 0 ? east++ : west++;
   const sx = sideX * (PLAZA_R + 44 + k * GAP);
-  const list = [s, ...descendants(s)];
+  const list = s.list;
   const north = list.slice(0, Math.ceil(list.length / 2)), south = list.slice(Math.ceil(list.length / 2));
   const place = (arr, dirZ) => arr.forEach((p, j) => {
     const along = ROAD_W / 2 + 14 + Math.floor(j / 2) * LOT;
@@ -74,7 +83,7 @@ sections.forEach((s, i) => {
   });
   place(north, -1); place(south, 1);
   const len = (arr) => (arr.length ? ROAD_W / 2 + 14 + Math.floor((arr.length - 1) / 2) * LOT + 18 : ROAD_W / 2);
-  streets.push({ x: sx, z0: -len(north), z1: len(south), key: s.key });
+  streets.push({ x: sx, z0: -len(north), z1: len(south), key: s.key, name: s.name });
 });
 const xs = streets.map((s) => s.x);
 const bx0 = Math.min(-PLAZA_R, ...xs) - 40, bx1 = Math.max(PLAZA_R, ...xs) + 40;
@@ -164,7 +173,7 @@ function groundText(text, x, z, ry, worldH = 3.2) {
 }
 const streetName = (p) => (p.name || p.key).replace(/\s*\(.*\)$/, "");
 streets.forEach((s) => {
-  const name = streetName(byKey.get(s.key));
+  const name = s.name.replace(/\s*\(.*\)$/, "");
   for (let z = s.z0 + 30; z < s.z1 - 20; z += 110) if (Math.abs(z) > ROAD_W) groundText(name, s.x, z, Math.PI / 2);
 });
 groundText("Boulevard", PLAZA_R + 24, 0, 0, 3);

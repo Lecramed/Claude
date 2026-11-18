@@ -74,6 +74,21 @@ function startServer(root) {
 }
 
 /* ---------- helpers ---------- */
+function parseRobots(txt) {
+  const rules = []; let applies = false, inAgents = false;
+  for (const raw of txt.split(/\r?\n/)) {
+    const line = raw.replace(/#.*/, "").trim(); if (!line) continue;
+    const m = line.match(/^([A-Za-z-]+)\s*:\s*(.*)$/); if (!m) continue;
+    const field = m[1].toLowerCase(), val = m[2].trim();
+    if (field === "user-agent") { if (!inAgents) applies = false; inAgents = true; if (val === "*") applies = true; continue; }
+    inAgents = false;
+    if (applies && field === "disallow" && val) {
+      const re = "^" + val.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\\\$$/, "$");
+      try { rules.push(new RegExp(re)); } catch {}
+    }
+  }
+  return rules;
+}
 function gitInfo(root) {
   try {
     const sha = execSync("git rev-parse --short HEAD", { cwd: root }).toString().trim();
@@ -259,6 +274,19 @@ function latestRunBefore(currentId) {
   const browser = await chromium.launch();
   const imgs = await makeImageTools(browser);
 
+  /* robots.txt respecteren (User-agent: *) */
+  let disallow = [];
+  if (args.url && !args["ignore-robots"]) {
+    const rp = await browser.newPage();
+    try {
+      const resp = await rp.goto(origin + "/robots.txt", { timeout: 15000 });
+      if (resp && resp.ok()) disallow = parseRobots(await resp.text());
+    } catch {}
+    await rp.close();
+    if (disallow.length) console.log(`robots.txt: ${disallow.length} uitgesloten paden`);
+  }
+  const allowed = (u) => { const x = new URL(u); return !disallow.some((re) => re.test(x.pathname + x.search)); };
+
   const start = normalize(baseUrl, baseUrl, origin);
   const queue = [{ url: start, parent: null, depth: 0 }];
   const seen = new Set([start]);
@@ -279,7 +307,7 @@ function latestRunBefore(currentId) {
       if (!n) continue;
       const lk = pageKey(n, origin);
       if (lk !== key && !links.includes(lk)) links.push(lk);
-      if (!seen.has(n)) { seen.add(n); queue.push({ url: n, parent: key, depth: depth + 1 }); }
+      if (!seen.has(n) && allowed(n)) { seen.add(n); queue.push({ url: n, parent: key, depth: depth + 1 }); }
     }
     pages.push({
       key, slug, url, parent, depth, status: m.status, error: m.error,

@@ -33,6 +33,17 @@ function treeParents(pages) {
     byPath.get(base).push(p.key);
   }
   const parent = new Map(pages.map((p) => [p.key, p.parent]));
+  // URL-hiërarchie: de dichtstbijzijnde gemeten "voorouder" in het pad wordt de ouder
+  const clean = (k) => k.split("?")[0].replace(/(^|\/)index\.html?$/, "").replace(/\/$/, "");
+  const byClean = new Map(pages.map((p) => [clean(p.key), p.key]));
+  for (const p of pages) {
+    if (p.key.includes("?")) continue;
+    const segs = clean(p.key).split("/").filter(Boolean);
+    for (let n = segs.length - 1; n >= 1; n--) {
+      const anc = byClean.get(segs.slice(0, n).join("/"));
+      if (anc && anc !== p.key) { parent.set(p.key, anc); break; }
+    }
+  }
   for (const members of byPath.values()) {
     if (members.length < 2) continue;
     let best = null, bestN = 0;
@@ -80,6 +91,37 @@ function pageNames(pages) {
   return new Map(pages.map((p, i) => [p.key, names[i]]));
 }
 
+/* Straten voor de stad: pagina's worden gegroepeerd op het eerste deel van hun pad
+   (/webwinkel/…, /advies/…). Grote groepen met een overzichtelijk aantal
+   subsecties worden per subsectie gesplitst (Webwinkel / Mobiliteit). Losse
+   pagina's zonder eigen straat komen samen in één straat. */
+function streetsFor(pages, rootKey) {
+  const segsOf = (k) => k.split("?")[0].replace(/(^|\/)index\.html?$/, "").replace(/\/$/, "").split("/").filter(Boolean).map((s) => { try { return decodeURIComponent(s); } catch { return s; } });
+  const pretty = (s) => s.replace(/\.html?$/, "").replace(/-\d{4,}$/, "").replace(/[-_]+/g, " ").trim().replace(/^./, (c) => c.toUpperCase());
+  const street = new Map();
+  const groups = new Map();
+  for (const p of pages) {
+    if (p.key === rootKey) continue;
+    const segs = segsOf(p.key);
+    if (!segs.length) { street.set(p.key, ["home", "Home"]); continue; }
+    const g = segs[0];
+    (groups.get(g) || groups.set(g, []).get(g)).push({ p, segs });
+  }
+  for (const [g, members] of groups) {
+    const seconds = new Set(members.filter((m) => m.segs.length > 1).map((m) => m.segs[1]));
+    const split = members.length > 40 && seconds.size > 1 && seconds.size <= 16;
+    for (const m of members) {
+      if (split && m.segs.length > 1) street.set(m.p.key, [g + "/" + m.segs[1], pretty(g) + " / " + pretty(m.segs[1])]);
+      else street.set(m.p.key, [g, pretty(g)]);
+    }
+  }
+  // losse pagina's bundelen
+  const count = new Map(); street.forEach(([k]) => count.set(k, (count.get(k) || 0) + 1));
+  const singles = [...street.entries()].filter(([, [k]]) => count.get(k) === 1);
+  if (singles.length >= 3) singles.forEach(([key]) => street.set(key, ["~losse-paginas", "Losse pagina's"]));
+  return street;
+}
+
 function build(runId, runsDir) {
   if (runsDir) { RUNS_DIR = runsDir; OUT_DIR = path.join(TOOL_DIR, "report", path.basename(runsDir)); }
   if (!runId) {
@@ -101,10 +143,12 @@ function build(runId, runsDir) {
 
   const tree = new Map(treeParents(run.pages).map((t) => [t.key, t]));
   const names = pageNames([...run.pages, ...(run.removed || [])]);
+  const rootKey = (run.pages.find((p) => !p.parent) || run.pages[0]).key;
+  const streetOf = streetsFor([...run.pages, ...(run.removed || [])], rootKey);
   const pages = run.pages.map((p) => {
     const c = p.compare || {};
     return {
-      key: p.key, name: names.get(p.key), title: p.title, url: p.url, status: p.status, error: p.error,
+      key: p.key, name: names.get(p.key), street: streetOf.get(p.key) || null, title: p.title, url: p.url, status: p.status, error: p.error,
       parent: tree.get(p.key).parent, depth: tree.get(p.key).depth, links: p.links,
       weight: p.weight, dom: p.dom, timing: p.timing, resources: p.resources.slice(0, 8), failed: p.failed || [],
       compare: c,
@@ -116,7 +160,7 @@ function build(runId, runsDir) {
     };
   });
   const removed = (run.removed || []).map((r) => ({
-    ...r, name: names.get(r.key), prevThumb: b64(path.join(prevDir, `${r.slug}.jpg`)),
+    ...r, name: names.get(r.key), street: streetOf.get(r.key) || null, prevThumb: b64(path.join(prevDir, `${r.slug}.jpg`)),
     prevFull: copy(path.join(prevDir, `${r.slug}-full.jpg`), `${r.slug}-prev.jpg`)
   }));
 
