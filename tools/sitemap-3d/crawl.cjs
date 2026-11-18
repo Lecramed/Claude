@@ -16,6 +16,7 @@
      --label <tekst>  naam voor deze meting (standaard: git-commit)
      --max <n>        max. aantal pagina's (standaard 80)
      --keep-query <a,b>  query-parameters die een aparte pagina maken (standaard: id)
+     --exclude <pad,pad> paden die worden overgeslagen, bv. /webwinkel (incl. alles eronder)
 =================================================================== */
 "use strict";
 
@@ -285,7 +286,14 @@ function latestRunBefore(currentId) {
     await rp.close();
     if (disallow.length) console.log(`robots.txt: ${disallow.length} uitgesloten paden`);
   }
-  const allowed = (u) => { const x = new URL(u); return !disallow.some((re) => re.test(x.pathname + x.search)); };
+  /* eigen uitsluitingen, bv. --exclude /webwinkel (productoverzichten en productpagina's overslaan) */
+  const excludes = String(args.exclude || "").split(",").map((s) => s.trim()).filter(Boolean).map((s) => (s.startsWith("/") ? s : "/" + s));
+  if (excludes.length) console.log(`overgeslagen: ${excludes.join(", ")}`);
+  const allowed = (u) => {
+    const x = new URL(u);
+    if (excludes.some((e) => x.pathname === e || x.pathname.startsWith(e.replace(/\/$/, "") + "/"))) return false;
+    return !disallow.some((re) => re.test(x.pathname + x.search));
+  };
 
   const start = normalize(baseUrl, baseUrl, origin);
   const queue = [{ url: start, parent: null, depth: 0 }];
@@ -361,7 +369,7 @@ function latestRunBefore(currentId) {
   const run = {
     id: runId, date: now.toISOString(), base: args.url ? baseUrl : "(lokaal) " + path.relative(REPO_ROOT, root || ".") || ".",
     label: args.label || (git ? `${git.sha} — ${git.msg}` : baseUrl),
-    git, viewport: VIEWPORT, previous: prevId, removed, pages
+    git, viewport: VIEWPORT, excludes: String(args.exclude || "").split(",").filter(Boolean), previous: prevId, removed, pages
   };
   fs.writeFileSync(path.join(runDir, "run.json"), JSON.stringify(run, null, 2));
   console.log(`\nMeting opgeslagen: ${path.relative(REPO_ROOT, runDir)}  (${pages.length} pagina's${prevId ? `, vergeleken met ${prevId}` : ", eerste meting"})`);
