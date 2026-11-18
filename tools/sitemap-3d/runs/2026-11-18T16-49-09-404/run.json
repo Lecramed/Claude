@@ -1,0 +1,2942 @@
+{
+  "id": "2026-11-18T16-49-09-404",
+  "date": "2026-11-18T16:49:09.404Z",
+  "base": "(lokaal) ../../../tmp/claude-0/-home-user-Claude/d58ec688-02e1-5790-b67d-8266c3f1edb8/scratchpad/prev",
+  "label": "e934c83 — Push visual style toward bold \"agency site\" motion design",
+  "git": {
+    "sha": "e934c83",
+    "msg": "Push visual style toward bold \"agency site\" motion design"
+  },
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "previous": null,
+  "removed": [],
+  "pages": [
+    {
+      "key": "index.html",
+      "slug": "index",
+      "url": "http://127.0.0.1:36517/",
+      "parent": null,
+      "depth": 0,
+      "status": 200,
+      "error": null,
+      "title": "KEIGOED — Handbeschilderde stenen webshop",
+      "links": [
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=uiltje-oker",
+        "product.html?id=mandala-zonsondergang",
+        "product.html?id=paddenstoel-rood",
+        "product.html?id=maan-sterren"
+      ],
+      "weight": {
+        "transfer": 157234,
+        "decoded": 161601,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 13751,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 407,
+        "svg": 17,
+        "images": 0,
+        "height": 3391
+      },
+      "timing": {
+        "domContentLoaded": 527,
+        "load": 833
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/",
+          "type": "html",
+          "bytes": 13751,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "shop.html",
+      "slug": "shop",
+      "url": "http://127.0.0.1:36517/shop.html",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Shop — KEIGOED",
+      "links": [
+        "index.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=mandala-zonsondergang",
+        "product.html?id=hart-liefde",
+        "product.html?id=uiltje-oker",
+        "product.html?id=maan-sterren",
+        "product.html?id=paddenstoel-rood",
+        "product.html?id=lieveheersbeestje-rood",
+        "product.html?id=mandala-oceaan",
+        "product.html?id=vlinder-paars",
+        "product.html?id=vogeltje-blauw",
+        "product.html?id=bloem-roze",
+        "product.html?id=mandala-bloesem",
+        "product.html?id=ster-regenboog",
+        "product.html?id=vosje-oranje",
+        "product.html?id=zon-stralend",
+        "product.html?id=cactus-bloei",
+        "product.html?id=vlinder-blauw",
+        "product.html?id=egeltje-bruin",
+        "product.html?id=golven-blauw",
+        "product.html?id=egeltje-mini",
+        "product.html?id=cadeauset-dieren",
+        "product.html?id=cadeauset-mandalas"
+      ],
+      "weight": {
+        "transfer": 149821,
+        "decoded": 154188,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 6338,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 1006,
+        "svg": 45,
+        "images": 0,
+        "height": 3537
+      },
+      "timing": {
+        "domContentLoaded": 163,
+        "load": 275
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/shop.html",
+          "type": "html",
+          "bytes": 6338,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "about.html",
+      "slug": "about",
+      "url": "http://127.0.0.1:36517/about.html",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Over ons — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "contact.html",
+        "cart.html"
+      ],
+      "weight": {
+        "transfer": 152727,
+        "decoded": 157094,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 9244,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 432,
+        "svg": 14,
+        "images": 0,
+        "height": 2581
+      },
+      "timing": {
+        "domContentLoaded": 237,
+        "load": 349
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/about.html",
+          "type": "html",
+          "bytes": 9244,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "contact.html",
+      "slug": "contact",
+      "url": "http://127.0.0.1:36517/contact.html",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Contact — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "cart.html"
+      ],
+      "weight": {
+        "transfer": 152981,
+        "decoded": 157348,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 9498,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 182,
+        "svg": 4,
+        "images": 0,
+        "height": 2010
+      },
+      "timing": {
+        "domContentLoaded": 189,
+        "load": 322
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/contact.html",
+          "type": "html",
+          "bytes": 9498,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "cart.html",
+      "slug": "cart",
+      "url": "http://127.0.0.1:36517/cart.html",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Winkelwagen — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html"
+      ],
+      "weight": {
+        "transfer": 149575,
+        "decoded": 153942,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 6092,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 115,
+        "svg": 2,
+        "images": 0,
+        "height": 982
+      },
+      "timing": {
+        "domContentLoaded": 147,
+        "load": 280
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/cart.html",
+          "type": "html",
+          "bytes": 6092,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=uiltje-oker",
+      "slug": "product-id-uiltje-oker",
+      "url": "http://127.0.0.1:36517/product.html?id=uiltje-oker",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Uiltje bij Maanlicht — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=lieveheersbeestje-rood",
+        "product.html?id=vosje-oranje",
+        "product.html?id=egeltje-bruin",
+        "product.html?id=vogeltje-blauw"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 320,
+        "svg": 13,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 169,
+        "load": 301
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=uiltje-oker",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=mandala-zonsondergang",
+      "slug": "product-id-mandala-zonsondergang",
+      "url": "http://127.0.0.1:36517/product.html?id=mandala-zonsondergang",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Mandala Zonsondergang — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=mandala-oceaan",
+        "product.html?id=mandala-bloesem"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 300,
+        "svg": 9,
+        "images": 0,
+        "height": 1888
+      },
+      "timing": {
+        "domContentLoaded": 133,
+        "load": 277
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=mandala-zonsondergang",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=paddenstoel-rood",
+      "slug": "product-id-paddenstoel-rood",
+      "url": "http://127.0.0.1:36517/product.html?id=paddenstoel-rood",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Sprookjes Paddenstoel — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=cactus-bloei",
+        "product.html?id=bloem-roze",
+        "product.html?id=golven-blauw"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 261,
+        "svg": 11,
+        "images": 0,
+        "height": 1888
+      },
+      "timing": {
+        "domContentLoaded": 185,
+        "load": 293
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=paddenstoel-rood",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=maan-sterren",
+      "slug": "product-id-maan-sterren",
+      "url": "http://127.0.0.1:36517/product.html?id=maan-sterren",
+      "parent": "index.html",
+      "depth": 1,
+      "status": 200,
+      "error": null,
+      "title": "Maan & Sterren — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=hart-liefde",
+        "product.html?id=zon-stralend",
+        "product.html?id=cadeauset-dieren",
+        "product.html?id=cadeauset-mandalas"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 328,
+        "svg": 13,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 165,
+        "load": 482
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=maan-sterren",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=hart-liefde",
+      "slug": "product-id-hart-liefde",
+      "url": "http://127.0.0.1:36517/product.html?id=hart-liefde",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Hart vol Liefde — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=maan-sterren",
+        "product.html?id=zon-stralend",
+        "product.html?id=cadeauset-dieren",
+        "product.html?id=cadeauset-mandalas"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 329,
+        "svg": 13,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 140,
+        "load": 244
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=hart-liefde",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=lieveheersbeestje-rood",
+      "slug": "product-id-lieveheersbeestje-rood",
+      "url": "http://127.0.0.1:36517/product.html?id=lieveheersbeestje-rood",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Vrolijk Lieveheersbeestje — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=uiltje-oker",
+        "product.html?id=vosje-oranje",
+        "product.html?id=egeltje-bruin",
+        "product.html?id=vogeltje-blauw"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 320,
+        "svg": 13,
+        "images": 0,
+        "height": 1888
+      },
+      "timing": {
+        "domContentLoaded": 236,
+        "load": 342
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=lieveheersbeestje-rood",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=mandala-oceaan",
+      "slug": "product-id-mandala-oceaan",
+      "url": "http://127.0.0.1:36517/product.html?id=mandala-oceaan",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Mandala Oceaan — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=mandala-zonsondergang",
+        "product.html?id=mandala-bloesem"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 301,
+        "svg": 9,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 147,
+        "load": 259
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=mandala-oceaan",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=vlinder-paars",
+      "slug": "product-id-vlinder-paars",
+      "url": "http://127.0.0.1:36517/product.html?id=vlinder-paars",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Paarse Vlinder — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=vlinder-blauw",
+        "product.html?id=ster-regenboog",
+        "product.html?id=egeltje-mini"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 265,
+        "svg": 11,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 160,
+        "load": 263
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=vlinder-paars",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=vogeltje-blauw",
+      "slug": "product-id-vogeltje-blauw",
+      "url": "http://127.0.0.1:36517/product.html?id=vogeltje-blauw",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Blij Vogeltje — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=uiltje-oker",
+        "product.html?id=lieveheersbeestje-rood",
+        "product.html?id=vosje-oranje",
+        "product.html?id=egeltje-bruin"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 320,
+        "svg": 13,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 151,
+        "load": 232
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=vogeltje-blauw",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=bloem-roze",
+      "slug": "product-id-bloem-roze",
+      "url": "http://127.0.0.1:36517/product.html?id=bloem-roze",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Roze Voorjaarsbloem — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=cactus-bloei",
+        "product.html?id=paddenstoel-rood",
+        "product.html?id=golven-blauw"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 261,
+        "svg": 11,
+        "images": 0,
+        "height": 1888
+      },
+      "timing": {
+        "domContentLoaded": 146,
+        "load": 258
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=bloem-roze",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=mandala-bloesem",
+      "slug": "product-id-mandala-bloesem",
+      "url": "http://127.0.0.1:36517/product.html?id=mandala-bloesem",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Mandala Bloesem — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=mandala-zonsondergang",
+        "product.html?id=mandala-oceaan"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 301,
+        "svg": 9,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 152,
+        "load": 276
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=mandala-bloesem",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=ster-regenboog",
+      "slug": "product-id-ster-regenboog",
+      "url": "http://127.0.0.1:36517/product.html?id=ster-regenboog",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Regenboog Ster — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=vlinder-paars",
+        "product.html?id=vlinder-blauw",
+        "product.html?id=egeltje-mini"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 265,
+        "svg": 11,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 150,
+        "load": 257
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=ster-regenboog",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=vosje-oranje",
+      "slug": "product-id-vosje-oranje",
+      "url": "http://127.0.0.1:36517/product.html?id=vosje-oranje",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Sluw Vosje — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=uiltje-oker",
+        "product.html?id=lieveheersbeestje-rood",
+        "product.html?id=egeltje-bruin",
+        "product.html?id=vogeltje-blauw"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 321,
+        "svg": 13,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 159,
+        "load": 252
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=vosje-oranje",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=zon-stralend",
+      "slug": "product-id-zon-stralend",
+      "url": "http://127.0.0.1:36517/product.html?id=zon-stralend",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Stralende Zon — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=maan-sterren",
+        "product.html?id=hart-liefde",
+        "product.html?id=cadeauset-dieren",
+        "product.html?id=cadeauset-mandalas"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 329,
+        "svg": 13,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 157,
+        "load": 279
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=zon-stralend",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=cactus-bloei",
+      "slug": "product-id-cactus-bloei",
+      "url": "http://127.0.0.1:36517/product.html?id=cactus-bloei",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Cactus in Bloei — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=bloem-roze",
+        "product.html?id=paddenstoel-rood",
+        "product.html?id=golven-blauw"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 262,
+        "svg": 11,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 259,
+        "load": 358
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=cactus-bloei",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=vlinder-blauw",
+      "slug": "product-id-vlinder-blauw",
+      "url": "http://127.0.0.1:36517/product.html?id=vlinder-blauw",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Blauwe Vlinder — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=vlinder-paars",
+        "product.html?id=ster-regenboog",
+        "product.html?id=egeltje-mini"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 264,
+        "svg": 11,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 147,
+        "load": 251
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=vlinder-blauw",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=egeltje-bruin",
+      "slug": "product-id-egeltje-bruin",
+      "url": "http://127.0.0.1:36517/product.html?id=egeltje-bruin",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Prikkelig Egeltje — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=uiltje-oker",
+        "product.html?id=lieveheersbeestje-rood",
+        "product.html?id=vosje-oranje",
+        "product.html?id=vogeltje-blauw"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 321,
+        "svg": 13,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 157,
+        "load": 351
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=egeltje-bruin",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=golven-blauw",
+      "slug": "product-id-golven-blauw",
+      "url": "http://127.0.0.1:36517/product.html?id=golven-blauw",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Golven van de Zee — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=cactus-bloei",
+        "product.html?id=bloem-roze",
+        "product.html?id=paddenstoel-rood"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 262,
+        "svg": 11,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 132,
+        "load": 253
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=golven-blauw",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=egeltje-mini",
+      "slug": "product-id-egeltje-mini",
+      "url": "http://127.0.0.1:36517/product.html?id=egeltje-mini",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Mini Egeltje — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=vlinder-paars",
+        "product.html?id=vlinder-blauw",
+        "product.html?id=ster-regenboog"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 265,
+        "svg": 11,
+        "images": 0,
+        "height": 1886
+      },
+      "timing": {
+        "domContentLoaded": 147,
+        "load": 235
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=egeltje-mini",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=cadeauset-dieren",
+      "slug": "product-id-cadeauset-dieren",
+      "url": "http://127.0.0.1:36517/product.html?id=cadeauset-dieren",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Cadeauset Dieren Trio — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=maan-sterren",
+        "product.html?id=hart-liefde",
+        "product.html?id=zon-stralend",
+        "product.html?id=cadeauset-mandalas"
+      ],
+      "weight": {
+        "transfer": 149040,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62990,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 328,
+        "svg": 13,
+        "images": 0,
+        "height": 1888
+      },
+      "timing": {
+        "domContentLoaded": 159,
+        "load": 261
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29023,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=cadeauset-dieren",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    },
+    {
+      "key": "product.html?id=cadeauset-mandalas",
+      "slug": "product-id-cadeauset-mandalas",
+      "url": "http://127.0.0.1:36517/product.html?id=cadeauset-mandalas",
+      "parent": "shop.html",
+      "depth": 2,
+      "status": 200,
+      "error": null,
+      "title": "Cadeauset Mandala Duo — KEIGOED",
+      "links": [
+        "index.html",
+        "shop.html",
+        "about.html",
+        "contact.html",
+        "cart.html",
+        "product.html?id=maan-sterren",
+        "product.html?id=hart-liefde",
+        "product.html?id=zon-stralend",
+        "product.html?id=cadeauset-dieren"
+      ],
+      "weight": {
+        "transfer": 149039,
+        "decoded": 153407,
+        "requests": 9,
+        "byType": {
+          "html": {
+            "bytes": 5557,
+            "count": 1
+          },
+          "css": {
+            "bytes": 30495,
+            "count": 2
+          },
+          "js": {
+            "bytes": 49998,
+            "count": 4
+          },
+          "font": {
+            "bytes": 62989,
+            "count": 2
+          }
+        }
+      },
+      "dom": {
+        "nodes": 328,
+        "svg": 13,
+        "images": 0,
+        "height": 1888
+      },
+      "timing": {
+        "domContentLoaded": 146,
+        "load": 247
+      },
+      "resources": [
+        {
+          "url": "https://fonts.gstatic.com/s/baloo2/v23/wXKrE3kTposypRyd51jcAA.woff2",
+          "type": "font",
+          "bytes": 33967,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/css/style.css",
+          "type": "css",
+          "bytes": 29049,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2",
+          "type": "font",
+          "bytes": 29022,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/data.js",
+          "type": "js",
+          "bytes": 19424,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/main.js",
+          "type": "js",
+          "bytes": 12702,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/animations.js",
+          "type": "js",
+          "bytes": 12467,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/product.html?id=cadeauset-mandalas",
+          "type": "html",
+          "bytes": 5557,
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:36517/js/cart.js",
+          "type": "js",
+          "bytes": 5405,
+          "status": 200
+        },
+        {
+          "url": "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap",
+          "type": "css",
+          "bytes": 1446,
+          "status": 200
+        }
+      ],
+      "compare": {
+        "status": "baseline"
+      }
+    }
+  ]
+}
