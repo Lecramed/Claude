@@ -10,6 +10,7 @@ Een 3D-weergave van de sitemap van een website, met per pagina een screenshot, h
 ```bash
 node tools/sitemap-3d/crawl.cjs                       # lokale bestanden in deze repo
 node tools/sitemap-3d/crawl.cjs --url https://www.werkenbijvegro.nl/   # live site
+node tools/sitemap-3d/crawl.cjs --url https://www.vegro.nl/ --exclude /webwinkel --exclude-pattern "-([a-z]\d{4,6}|\d{5})$" --max 200   # zonder PLP's en PDP's
 ```
 
 Metingen en rapporten worden per site bewaard (`runs/werkenbijvegro.nl/`, `runs/local/`). Bij een live site moeten alle hosts die de site laadt bereikbaar zijn; verzoeken die niet lukten staan per pagina onder "Niet geladen".

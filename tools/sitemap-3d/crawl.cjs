@@ -17,7 +17,7 @@
      --max <n>        max. aantal pagina's (standaard 80)
      --keep-query <a,b>  query-parameters die een aparte pagina maken (standaard: id)
      --exclude <pad,pad> paden die worden overgeslagen, bv. /webwinkel (incl. alles eronder)
-     --exclude-pattern <regex>  paden die op dit patroon lijken worden overgeslagen, bv. "-(a\\d{4,6}|\\d{5})$"
+     --exclude-pattern <regex>  paden die op dit patroon lijken worden overgeslagen, bv. "-([a-z]\\d{4,6}|\\d{5})$"
 =================================================================== */
 "use strict";
 

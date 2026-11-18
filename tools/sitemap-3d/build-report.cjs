@@ -177,7 +177,8 @@ function build(runId, runsDir) {
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
   for (const [tplName, outName] of [["template-city.html", "index.html"], ["template.html", "sitemap.html"]]) {
     const tpl = fs.readFileSync(path.join(TOOL_DIR, tplName), "utf8");
-    const html = tpl.replace("/*__REPORT_DATA__*/null", () => json).replace("/*__CITY_SCENE__*/", () => fs.readFileSync(path.join(TOOL_DIR, "city-scene.js"), "utf8"));
+    const site = /^https?:/.test(run.base) ? new URL(run.base).hostname.replace(/^www\./, "") : "lokaal";
+    const html = tpl.replace(/<title>([^<]*)<\/title>/, (m, t) => `<title>${t.replace(/^KEIGOED /, "")} ${site}</title>`).replace("/*__REPORT_DATA__*/null", () => json).replace("/*__CITY_SCENE__*/", () => fs.readFileSync(path.join(TOOL_DIR, "city-scene.js"), "utf8"));
     fs.writeFileSync(path.join(OUT_DIR, outName), html);
     console.log(`Rapport: ${path.relative(process.cwd(), path.join(OUT_DIR, outName))}  (${(html.length / 1024 / 1024).toFixed(1)} MB)`);
   }
