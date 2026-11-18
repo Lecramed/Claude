@@ -157,7 +157,7 @@ td .t { display: inline-block; max-width: 300px; overflow: hidden; text-overflow
       </div>
       <canvas id="minimap" width="200" height="200" aria-label="Plattegrond; klik op een gebouw om erheen te rijden"></canvas>
       <div class="dash"><span id="speed" class="mono">0 km/u</span><span id="near" hidden></span></div>
-      <div class="hint">Klik op de stad en rijd met de pijltjes of WASD · Shift = turbo · Spatie = rem · C = camera · R = terug naar start. Gebouwhoogte = paginagewicht, dakkleur = verschil met vorige meting.</div>
+      <div class="hint">Klik op de stad en rijd met de pijltjes of WASD · Shift = turbo · Spatie = rem · C = kaart of achter de auto · scrollen = zoomen · R = terug naar start. Gebouwhoogte = paginagewicht, dakkleur = verschil met vorige meting.</div>
       <div class="touch" aria-hidden="true">
         <div><button type="button" data-touch="left">◀</button><button type="button" data-touch="right">▶</button></div>
         <div><button type="button" data-touch="down">▼</button><button type="button" data-touch="up">▲</button></div>
@@ -363,12 +363,14 @@ td .t { display: inline-block; max-width: 300px; overflow: hidden; text-overflow
 </script>
 
 <script type="module">
-/* ===== Sitemap-stad (three.js) =====
-   Elke pagina is een gebouw. De homepage staat als toren op het plein;
-   elke sectie (pagina op niveau 1) krijgt een eigen straat vanaf de ringweg,
-   met alle onderliggende pagina's als gebouwen langs die straat.
-   Hoogte = paginagewicht (logaritmisch), dakkleur = verschil met de vorige meting,
-   gevelscherm = screenshot. Rijden: pijltjes/WASD, Shift = turbo, C = camera. */
+/* ===== Sitemap-stad (three.js), in kaartstijl =====
+   Elke pagina is een gebouw. De homepage staat als toren in het park in het midden;
+   elke sectie (pagina op niveau 1) krijgt een dwarsstraat aan de boulevard, met alle
+   onderliggende pagina's als gebouwen langs die straat.
+   Stijl: egale, licht steenkleurige blokken met getrapte vormen, witte wegen met
+   straatnamen op het wegdek, lichtgroene parken, schuin bovenaanzicht.
+   Hoogte = paginagewicht (lineair), dakkleur = verschil met de vorige meting,
+   gevelpaneel = screenshot. Rijden: pijltjes/WASD, Shift = turbo, C = camera. */
 import * as THREE from "three";
 
 const R = window.REPORT, U = window.UTIL;
@@ -380,6 +382,15 @@ const isDark = () => {
   return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
 };
 
+/* kaartpalet: licht (dag) en donker (nacht) */
+const PAL = {
+  light: { ground: "#f1efe6", park: "#dcebcf", parkEdge: "#b9d1a6", road: "#fdfdfb", kerb: "#c9c7bd", walk: "#e9e7df", walkDot: "#bdbab0",
+    wall: "#d8d3c4", roof: "#ebe7da", label: "#7d7a58", labelHalo: "#ffffff", ink: "#3d3a2f", tree: "#9fc28a", fog: "#f1efe6" },
+  dark: { ground: "#1b1f23", park: "#1f2a22", parkEdge: "#2e3d31", road: "#2c3238", kerb: "#3e464d", walk: "#252a2f", walkDot: "#3c444b",
+    wall: "#4a4f55", roof: "#5c6168", label: "#a9ad8e", labelHalo: "#14171a", ink: "#e1e3d8", tree: "#3e5a3a", fog: "#1b1f23" }
+};
+let P = isDark() ? PAL.dark : PAL.light;
+
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -388,9 +399,11 @@ renderer.domElement.setAttribute("aria-label", "Sitemap-stad. Gebruik de pijltje
 stage.prepend(renderer.domElement);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, 1, 0.5, 3000);
-const hemi = new THREE.HemisphereLight(0xffffff, 0x666655, 1.5); scene.add(hemi);
-const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(120, 260, 80); scene.add(sun);
+const camera = new THREE.PerspectiveCamera(38, 1, 1, 4000);
+// zacht licht van boven, één kant duidelijk donkerder (zoals op de kaart)
+const ambient = new THREE.AmbientLight(0xffffff, 1.15); scene.add(ambient);
+const sun = new THREE.DirectionalLight(0xffffff, 1.9); sun.position.set(-160, 260, 110); scene.add(sun);
+const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(120, 80, -60); scene.add(fill);
 
 /* ---------- stadsplan ---------- */
 const all = [...R.pages, ...R.removed.map((r) => ({ ...r, weight: { transfer: r.transfer }, dom: {} }))];
@@ -400,300 +413,275 @@ const kids = new Map();
 all.forEach((p) => {
   if (p === root) return;
   const par = p.parent && byKey.has(p.parent) ? p.parent : root.key;
-  p._parent = par;
   (kids.get(par) || kids.set(par, []).get(par)).push(p);
 });
 const sections = (kids.get(root.key) || []).slice().sort((a, b) => a.key.localeCompare(b.key));
 const descendants = (p) => { const out = []; const walk = (q) => (kids.get(q.key) || []).forEach((c) => { out.push(c); walk(c); }); walk(p); return out; };
 
-const PLAZA_R = 46, ROAD_W = 14, LOT = 15, SET = 15; // plein, straatbreedte, kavelafstand, afstand gebouw–as
-const GAP = 58; // afstand tussen twee dwarsstraten
-const lots = [];     // {p, x, z, rot}
-const streets = [];  // dwarsstraten: {x, z0, z1, key}
+const PLAZA_R = 46, ROAD_W = 13, LOT = 17, SET = 17; // park, straatbreedte, kavelafstand, afstand gebouw–as
+const GAP = 66; // afstand tussen twee dwarsstraten
+const lots = [], streets = [];
 const maxKB = Math.max(...all.map((p) => p.weight.transfer / 1024));
-const hOf = (b) => 7 + (b / 1024 / maxKB) * 80; // lineair: 2× zo zwaar = 2× zo hoog (boven een vaste begane grond)
+const hOf = (b) => 10 + (b / 1024 / maxKB) * 90; // lineair boven een vaste begane grond van 10
 
-/* Stratenplan: een boulevard (oost–west) door het plein met de homepage-toren.
-   Elke sectie krijgt een dwarsstraat (noord–zuid); de sectiepagina staat op de
-   hoek, de onderliggende pagina's staan aan beide kanten van die straat. */
 lots.push({ p: root, x: 0, z: 0, rot: 0, tower: true });
 let east = 0, west = 0;
 sections.forEach((s, i) => {
   const sideX = i % 2 === 0 ? 1 : -1;
   const k = sideX > 0 ? east++ : west++;
-  const sx = sideX * (PLAZA_R + 40 + k * GAP);
+  const sx = sideX * (PLAZA_R + 44 + k * GAP);
   const list = [s, ...descendants(s)];
   const north = list.slice(0, Math.ceil(list.length / 2)), south = list.slice(Math.ceil(list.length / 2));
   const place = (arr, dirZ) => arr.forEach((p, j) => {
-    const along = ROAD_W / 2 + 12 + Math.floor(j / 2) * LOT;
+    const along = ROAD_W / 2 + 14 + Math.floor(j / 2) * LOT;
     const side = j % 2 ? 1 : -1;
     lots.push({ p, x: sx + side * SET, z: dirZ * along, rot: -side * Math.PI / 2, section: s.key });
   });
   place(north, -1); place(south, 1);
-  const len = (arr) => (arr.length ? ROAD_W / 2 + 12 + Math.floor((arr.length - 1) / 2) * LOT + 16 : ROAD_W / 2);
+  const len = (arr) => (arr.length ? ROAD_W / 2 + 14 + Math.floor((arr.length - 1) / 2) * LOT + 18 : ROAD_W / 2);
   streets.push({ x: sx, z0: -len(north), z1: len(south), key: s.key });
 });
 const xs = streets.map((s) => s.x);
-const bx0 = Math.min(-PLAZA_R, ...xs) - 30, bx1 = Math.max(PLAZA_R, ...xs) + 30;
-const bz0 = Math.min(-PLAZA_R, ...streets.map((s) => s.z0)) - 20, bz1 = Math.max(PLAZA_R, ...streets.map((s) => s.z1)) + 20;
-const reach = Math.max(bx1 - bx0, bz1 - bz0) / 2 + 40;
+const bx0 = Math.min(-PLAZA_R, ...xs) - 40, bx1 = Math.max(PLAZA_R, ...xs) + 40;
+const bz0 = Math.min(-PLAZA_R, ...streets.map((s) => s.z0)) - 30, bz1 = Math.max(PLAZA_R, ...streets.map((s) => s.z1)) + 30;
 
-/* ---------- grond, wegen ---------- */
-const groundMat = new THREE.MeshStandardMaterial({ roughness: 1 });
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000), groundMat);
-ground.rotation.x = -Math.PI / 2; scene.add(ground);
+/* ---------- grond, parken, wegen ---------- */
+const mats = {
+  ground: new THREE.MeshLambertMaterial(), park: new THREE.MeshLambertMaterial(), road: new THREE.MeshLambertMaterial(),
+  kerb: new THREE.MeshBasicMaterial(), walk: new THREE.MeshLambertMaterial(), tree: new THREE.MeshLambertMaterial(),
+  wall: new THREE.MeshLambertMaterial(), parkEdge: new THREE.LineDashedMaterial({ dashSize: 1.4, gapSize: 1.2 })
+};
+const flat = (geo, mat, x, y, z, ry = 0) => {
+  const m = new THREE.Mesh(geo, mat); m.rotation.x = -Math.PI / 2;
+  const g = new THREE.Group(); g.position.set(x, y, z); g.rotation.y = ry; g.add(m); scene.add(g); return g;
+};
+flat(new THREE.PlaneGeometry(6000, 6000), mats.ground, 0, 0, 0);
 
-function dashTexture() {
-  const c = document.createElement("canvas"); c.width = 64; c.height = 256;
-  const x = c.getContext("2d");
-  x.fillStyle = "#3a3f44"; x.fillRect(0, 0, 64, 256);
-  for (let i = 0; i < 1500; i++) { x.fillStyle = `rgba(255,255,255,${Math.random() * 0.05})`; x.fillRect(Math.random() * 64, Math.random() * 256, 1.5, 1.5); }
-  x.fillStyle = "#e9e2c8"; x.fillRect(30, 20, 4, 110);
-  x.fillStyle = "#d8d8d0"; x.fillRect(2, 0, 2, 256); x.fillRect(60, 0, 2, 256);
-  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+function dashedOutline(pts, y) {
+  const g = new THREE.BufferGeometry().setFromPoints(pts.map(([x, z]) => new THREE.Vector3(x, y, z)));
+  const l = new THREE.Line(g, mats.parkEdge); l.computeLineDistances(); scene.add(l);
 }
-const roadTex = dashTexture();
-const asphalt = new THREE.MeshStandardMaterial({ color: 0x3a3f44, roughness: 0.95 });
-const plazaMat = new THREE.MeshStandardMaterial({ roughness: 0.9 });
-const sidewalkMat = new THREE.MeshStandardMaterial({ roughness: 0.95 });
-function road(x0, z0, x1, z1, y = 0.06) { // rechte weg van (x0,z0) naar (x1,z1)
+function park(x0, z0, x1, z1) {
+  flat(new THREE.PlaneGeometry(Math.abs(x1 - x0), Math.abs(z1 - z0)), mats.park, (x0 + x1) / 2, 0.02, (z0 + z1) / 2);
+  dashedOutline([[x0 + 1, z0 + 1], [x1 - 1, z0 + 1], [x1 - 1, z1 - 1], [x0 + 1, z1 - 1], [x0 + 1, z0 + 1]], 0.05);
+}
+// middenpark rond de toren
+flat(new THREE.CircleGeometry(PLAZA_R - ROAD_W / 2, 72), mats.park, 0, 0.02, 0);
+{
+  const pts = []; for (let i = 0; i <= 96; i++) { const a = (i / 96) * Math.PI * 2; pts.push([Math.cos(a) * (PLAZA_R - ROAD_W / 2 - 4), Math.sin(a) * (PLAZA_R - ROAD_W / 2 - 4)]); }
+  dashedOutline(pts, 0.05);
+}
+// parken aan het eind van korte straten en tussen de straten
+streets.forEach((s, i) => {
+  const neighbours = xs.filter((x) => x !== s.x).map((x) => Math.abs(x - s.x));
+  const w = Math.min(GAP, ...neighbours) - 8;
+  if (s.z1 < 120) park(s.x - w / 2, s.z1 + 6, s.x + w / 2, s.z1 + 6 + 46 + (i % 3) * 14);
+  if (-s.z0 < 120) park(s.x - w / 2, s.z0 - 6 - 40 - (i % 2) * 18, s.x + w / 2, s.z0 - 6);
+});
+
+function road(x0, z0, x1, z1, y = 0.06) {
   const L = Math.hypot(x1 - x0, z1 - z0); if (L < 1) return;
-  const tex = roadTex.clone(); tex.repeat.set(1, L / 18); tex.needsUpdate = true;
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(ROAD_W, L), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 }));
-  m.rotation.x = -Math.PI / 2;
-  const h = new THREE.Group(); h.position.set((x0 + x1) / 2, y, (z0 + z1) / 2); h.rotation.y = Math.atan2(x1 - x0, z1 - z0);
-  h.add(m); scene.add(h);
+  const ry = Math.atan2(x1 - x0, z1 - z0), cx = (x0 + x1) / 2, cz = (z0 + z1) / 2;
+  flat(new THREE.PlaneGeometry(ROAD_W + 0.8, L + 0.8), mats.kerb, cx, y - 0.01, cz, ry); // dunne stoeprandlijn
+  flat(new THREE.PlaneGeometry(ROAD_W, L), mats.road, cx, y, cz, ry);
 }
 function sidewalk(x0, z0, x1, z1) {
   const L = Math.hypot(x1 - x0, z1 - z0); if (L < 2) return;
-  const m = new THREE.Mesh(new THREE.BoxGeometry(3, 0.16, L), sidewalkMat);
-  m.position.set((x0 + x1) / 2, 0.08, (z0 + z1) / 2); m.rotation.y = Math.atan2(x1 - x0, z1 - z0); scene.add(m);
+  flat(new THREE.PlaneGeometry(4, L), mats.walk, (x0 + x1) / 2, 0.035, (z0 + z1) / 2, Math.atan2(x1 - x0, z1 - z0));
 }
-const plaza = new THREE.Mesh(new THREE.CircleGeometry(PLAZA_R - ROAD_W / 2, 64), plazaMat);
-plaza.rotation.x = -Math.PI / 2; plaza.position.y = 0.04; scene.add(plaza);
-const ringRoad = new THREE.Mesh(new THREE.RingGeometry(PLAZA_R - ROAD_W / 2, PLAZA_R + ROAD_W / 2, 96), asphalt);
-ringRoad.rotation.x = -Math.PI / 2; ringRoad.position.y = 0.05; scene.add(ringRoad);
-// boulevard
-const half = ROAD_W / 2, walkOff = half + 1.5;
-road(PLAZA_R, 0, bx1 - 10, 0); road(-PLAZA_R, 0, bx0 + 10, 0);
-const crossXs = xs.slice().sort((a, b) => a - b);
-for (const dir of [1, -1]) {
-  const stops = [dir * PLAZA_R, ...crossXs.filter((x) => Math.sign(x) === dir), dir > 0 ? bx1 - 10 : bx0 + 10].sort((a, b) => a - b);
-  for (let i = 0; i < stops.length - 1; i++) for (const sz of [-1, 1]) sidewalk(stops[i] + (i ? walkOff : 6), sz * walkOff, stops[i + 1] - (i < stops.length - 2 ? walkOff : 0), sz * walkOff);
-}
-[bx0 + 10, bx1 - 10].forEach((x) => { const e = new THREE.Mesh(new THREE.CircleGeometry(ROAD_W * 0.9, 32), asphalt); e.rotation.x = -Math.PI / 2; e.position.set(x, 0.055, 0); scene.add(e); });
-// dwarsstraten
+const half = ROAD_W / 2, walkOff = half + 2.4;
+// ringweg om het park
+flat(new THREE.RingGeometry(PLAZA_R - half - 0.4, PLAZA_R + half + 0.4, 128), mats.kerb, 0, 0.05, 0);
+flat(new THREE.RingGeometry(PLAZA_R - half, PLAZA_R + half, 128), mats.road, 0, 0.06, 0);
+// boulevard en dwarsstraten
+road(PLAZA_R, 0, bx1 - 14, 0); road(-PLAZA_R, 0, bx0 + 14, 0);
+for (const sz of [-1, 1]) { sidewalk(PLAZA_R + 6, sz * walkOff, bx1 - 14, sz * walkOff); sidewalk(-PLAZA_R - 6, sz * walkOff, bx0 + 14, sz * walkOff); }
 streets.forEach((s) => {
   road(s.x, s.z0, s.x, s.z1, 0.065);
-  for (const sx of [-1, 1]) { sidewalk(s.x + sx * walkOff, s.z0 + 4, s.x + sx * walkOff, -walkOff); sidewalk(s.x + sx * walkOff, walkOff, s.x + sx * walkOff, s.z1 - 4); }
-  [s.z0, s.z1].forEach((z) => { if (Math.abs(z) > ROAD_W) { const e = new THREE.Mesh(new THREE.CircleGeometry(ROAD_W * 0.9, 32), asphalt); e.rotation.x = -Math.PI / 2; e.position.set(s.x, 0.055, z); scene.add(e); } });
+  for (const sx of [-1, 1]) { sidewalk(s.x + sx * walkOff, s.z0 + 2, s.x + sx * walkOff, -walkOff); sidewalk(s.x + sx * walkOff, walkOff, s.x + sx * walkOff, s.z1 - 2); }
+  [s.z0, s.z1].forEach((z) => { if (Math.abs(z) > ROAD_W) { flat(new THREE.CircleGeometry(ROAD_W * 0.85 + 0.4, 40), mats.kerb, s.x, 0.055, z); flat(new THREE.CircleGeometry(ROAD_W * 0.85, 40), mats.road, s.x, 0.062, z); } });
 });
+[bx0 + 14, bx1 - 14].forEach((x) => { flat(new THREE.CircleGeometry(ROAD_W * 0.85 + 0.4, 40), mats.kerb, x, 0.055, 0); flat(new THREE.CircleGeometry(ROAD_W * 0.85, 40), mats.road, x, 0.062, 0); });
 
-/* straatnaambordjes op de hoek van elke dwarsstraat */
-function signTexture(text) {
-  const c = document.createElement("canvas"); c.width = 512; c.height = 96;
+/* ---------- tekst op de kaart: straatnamen op het wegdek ---------- */
+const groundTexts = [];
+function textTexture(text, size, weight = 600) {
+  const c = document.createElement("canvas");
   const x = c.getContext("2d");
-  x.fillStyle = "#1f5a8a"; x.fillRect(0, 0, 512, 96);
-  x.strokeStyle = "#fff"; x.lineWidth = 5; x.strokeRect(8, 8, 496, 80);
-  x.fillStyle = "#fff"; x.font = "600 44px 'Space Grotesk', system-ui, sans-serif"; x.textAlign = "center"; x.textBaseline = "middle";
-  let t = text; while (x.measureText(t).width > 470 && t.length > 4) t = t.slice(0, -2); if (t !== text) t = t.trim() + "…";
-  x.fillText(t, 256, 50);
-  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+  const font = `${weight} ${size}px 'Inter', system-ui, sans-serif`;
+  x.font = font; const w = Math.ceil(x.measureText(text).width) + 16;
+  c.width = w; c.height = Math.ceil(size * 1.5);
+  const draw = () => {
+    x.clearRect(0, 0, c.width, c.height);
+    x.font = font; x.textBaseline = "middle";
+    x.lineWidth = size / 5; x.strokeStyle = P.labelHalo; x.lineJoin = "round"; x.strokeText(text, 8, c.height / 2);
+    x.fillStyle = P.label; x.fillText(text, 8, c.height / 2);
+  };
+  draw();
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  return { t, w: c.width, h: c.height, redraw: () => { draw(); t.needsUpdate = true; } };
 }
-const poleMat = new THREE.MeshStandardMaterial({ color: 0x7a8288, roughness: 0.5, metalness: 0.4 });
+function groundText(text, x, z, ry, worldH = 3.2) {
+  const tx = textTexture(text, 64);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(worldH * tx.w / tx.h, worldH), new THREE.MeshBasicMaterial({ map: tx.t, transparent: true, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2; m.rotation.z = ry;
+  m.position.set(x, 0.09, z); scene.add(m); groundTexts.push(tx);
+}
+const streetName = (p) => (p.name || p.key).replace(/\s*\(.*\)$/, "");
 streets.forEach((s) => {
-  const p = byKey.get(s.key);
-  const g = new THREE.Group(); g.position.set(s.x + (half + 3) * (s.x > 0 ? -1 : 1), 0, half + 3); scene.add(g);
-  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 6.5, 8), poleMat); pole.position.y = 3.25; g.add(pole);
-  const mat = new THREE.MeshBasicMaterial({ map: signTexture(p.name || p.key) });
-  for (const r of [0, Math.PI]) { const b = new THREE.Mesh(new THREE.PlaneGeometry(7, 1.3), mat); b.position.set(0, 6, r ? -0.03 : 0.03); b.rotation.y = r; g.add(b); }
+  const name = streetName(byKey.get(s.key));
+  for (let z = s.z0 + 30; z < s.z1 - 20; z += 110) if (Math.abs(z) > ROAD_W) groundText(name, s.x, z, Math.PI / 2);
 });
+groundText("Boulevard", PLAZA_R + 24, 0, 0, 3);
+groundText(root.name || "Home", 0, PLAZA_R - half - 10, 0, 3.4);
 
 /* ---------- gebouwen ---------- */
 function stateVar(p) {
   if (p.state === "removed") return "--gone";
   if (p.state === "new") return "--new";
-  if (p.state === "baseline") return "--accent";
   if (p.state === "same") return "--same";
+  if (p.state === "baseline") return null; // eerste meting: gewoon dak
   return (p.compare || {}).transfer < -52 ? "--down" : "--up";
 }
-const WALLS = ["#c9c3b8", "#b9c2c9", "#d3c6b0", "#a9b4ae", "#c4b5ae", "#bfc6cf"];
-function windowTexture(seed) {
-  const c = document.createElement("canvas"); c.width = 128; c.height = 128;
-  const x = c.getContext("2d");
-  x.fillStyle = "#ffffff"; x.fillRect(0, 0, 128, 128);
-  let r = seed * 9301 + 49297;
-  const rnd = () => ((r = (r * 9301 + 49297) % 233280) / 233280);
-  for (let row = 0; row < 4; row++) for (let col = 0; col < 4; col++) {
-    const lit = rnd() > 0.45;
-    x.fillStyle = lit ? "#ffe2a6" : "#4a5560";
-    x.fillRect(col * 32 + 7, row * 32 + 8, 18, 18);
-  }
-  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t;
-}
-function emissiveTexture(seed) {
-  const c = document.createElement("canvas"); c.width = 128; c.height = 128;
-  const x = c.getContext("2d"); x.fillStyle = "#000"; x.fillRect(0, 0, 128, 128);
-  let r = seed * 9301 + 49297;
-  const rnd = () => ((r = (r * 9301 + 49297) % 233280) / 233280);
-  for (let row = 0; row < 4; row++) for (let col = 0; col < 4; col++) {
-    if (rnd() > 0.45) { x.fillStyle = "#ffcf7a"; x.fillRect(col * 32 + 7, row * 32 + 8, 18, 18); }
-  }
-  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t;
-}
+function rng(seed) { let r = (seed * 9301 + 49297) % 233280; return () => ((r = (r * 9301 + 49297) % 233280) / 233280); }
+function hashKey(k) { let h = 0; for (const c of k) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h % 100000; }
+
 function labelTexture(p) {
-  const c = document.createElement("canvas"); c.width = 640; c.height = 150;
+  const c = document.createElement("canvas"); c.width = 720; c.height = 150;
   const x = c.getContext("2d");
-  x.fillStyle = "rgba(255,255,255,0.94)"; x.beginPath(); x.roundRect(4, 4, 632, 142, 22); x.fill();
-  x.fillStyle = css(stateVar(p)); x.beginPath(); x.roundRect(4, 4, 18, 142, [22, 0, 0, 22]); x.fill();
-  x.fillStyle = "#1b2227"; x.font = "600 46px 'Space Grotesk', system-ui, sans-serif";
+  x.lineJoin = "round"; x.textAlign = "center";
   let name = p.name || p.key; const full = name;
-  while (x.measureText(name).width > 590 && name.length > 4) name = name.slice(0, -2);
+  x.font = "600 50px 'Inter', system-ui, sans-serif";
+  while (x.measureText(name).width > 690 && name.length > 4) name = name.slice(0, -2);
   if (name !== full) name = name.trim() + "…";
-  x.fillText(name, 40, 64);
-  x.font = "600 38px 'JetBrains Mono', monospace"; x.fillStyle = "#4b5660";
-  const w = U.kb(p.weight.transfer); x.fillText(w, 40, 120);
-  const c2 = p.compare || {}; let extra = "", col = "#4b5660";
-  if (p.state === "removed") { extra = "verwijderd"; col = "#6f7880"; }
-  else if (p.state === "new") { extra = "nieuw"; col = "#6448cc"; }
-  else if (c2.transfer != null) { extra = U.dKB(c2.transfer); const k = U.dCls(c2.transfer); col = k === "up" ? "#cc4a2e" : k === "down" ? "#23905a" : "#4b5660"; }
-  if (p.status >= 400) { extra = `HTTP ${p.status}`; col = "#cc2e2e"; }
-  x.fillStyle = col; x.fillText(extra, 40 + x.measureText(w).width + 24, 120);
+  x.lineWidth = 12; x.strokeStyle = P.labelHalo; x.strokeText(name, 360, 62); x.fillStyle = P.ink; x.fillText(name, 360, 62);
+  const c2 = p.compare || {};
+  let sub = U.kb(p.weight.transfer), col = P.label;
+  if (p.status >= 400) { sub += `  ·  HTTP ${p.status}`; col = "#c62828"; }
+  else if (p.state === "removed") sub += "  ·  verwijderd";
+  else if (p.state === "new") { sub += "  ·  nieuw"; col = css("--new"); }
+  else if (c2.transfer != null && Math.abs(c2.transfer) >= 52) { sub += "  ·  " + U.dKB(c2.transfer); col = c2.transfer > 0 ? css("--up") : css("--down"); }
+  x.font = "600 42px 'JetBrains Mono', monospace";
+  x.lineWidth = 10; x.strokeText(sub, 360, 124); x.fillStyle = col; x.fillText(sub, 360, 124);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
 }
 
 const loader = new THREE.TextureLoader();
 const buildings = new Map(); const pickables = [];
-lots.forEach((lot, i) => {
+const box = (w, h, d) => { const g = new THREE.BoxGeometry(w, h, d); g.translate(0, h / 2, 0); return g; };
+lots.forEach((lot) => {
   const p = lot.p;
+  const rnd = rng(hashKey(p.key) + 7);
   const broken = p.status >= 400 || p.error;
   const removed = p.state === "removed";
-  const W = lot.tower ? 16 : 11, D = lot.tower ? 16 : 10;
-  const H = broken ? 5 : hOf(p.weight.transfer) + (lot.tower ? 6 : 0);
+  const H = broken ? 4 : hOf(p.weight.transfer);
+  const W = lot.tower ? 20 : 12 + Math.round(rnd() * 2), D = lot.tower ? 16 : 10 + Math.round(rnd() * 3);
   const g = new THREE.Group(); g.position.set(lot.x, 0, lot.z); g.rotation.y = lot.rot; scene.add(g);
 
-  const wt = windowTexture(i + 3); wt.repeat.set(W / 6, H / 6);
-  const et = emissiveTexture(i + 3); et.repeat.set(W / 6, H / 6);
-  const wallMat = new THREE.MeshStandardMaterial({
-    color: broken ? "#5b5f63" : WALLS[i % WALLS.length], map: wt, emissiveMap: et, emissive: new THREE.Color("#ffffff"), emissiveIntensity: 0,
-    roughness: 0.85, transparent: removed, opacity: removed ? 0.3 : 1
-  });
-  const roofMat = new THREE.MeshStandardMaterial({ roughness: 0.6, transparent: removed, opacity: removed ? 0.4 : 1 });
-  const body = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), [wallMat, wallMat, roofMat, wallMat, wallMat, wallMat]);
-  body.position.y = H / 2; g.add(body);
-  const crown = new THREE.Mesh(new THREE.BoxGeometry(W + 0.6, 1.2, D + 0.6), new THREE.MeshStandardMaterial({ roughness: 0.4, emissiveIntensity: 0.35, transparent: removed, opacity: removed ? 0.4 : 1 }));
-  crown.position.y = H + 0.6; g.add(crown);
-  const plinth = new THREE.Mesh(new THREE.BoxGeometry(W + 3, 0.35, D + 3), sidewalkMat); plinth.position.y = 0.17; g.add(plinth);
+  const wallMat = new THREE.MeshLambertMaterial({ transparent: removed, opacity: removed ? 0.35 : 1 });
+  const roofMat = new THREE.MeshLambertMaterial({ transparent: removed, opacity: removed ? 0.45 : 1 });
+  const mk = (w, h, d, x, z, y = 0) => {
+    const m = new THREE.Mesh(box(w, h, d), [wallMat, wallMat, roofMat, wallMat, wallMat, wallMat]);
+    m.position.set(x, y, z); g.add(m); m.userData.key = p.key; pickables.push(m); return m;
+  };
+  // hoofdvolume met getrapte top en een lagere vleugel aan de achterkant, zoals op de kaart
+  const tiers = [];
+  if (!broken && H > 26 && rnd() > 0.35) {
+    const hMain = H * (0.72 + rnd() * 0.12);
+    mk(W, hMain, D, 0, 0); tiers.push(hMain);
+    mk(W * (0.55 + rnd() * 0.2), H - hMain, D * (0.6 + rnd() * 0.2), (rnd() - 0.5) * 2, -(rnd()) * 1.5, hMain);
+  } else mk(W, H, D, 0, 0);
+  if (!broken && !lot.tower) {
+    const wh = Math.max(5, H * (0.3 + rnd() * 0.3)), wd = 4 + rnd() * 4, ww = W * (0.6 + rnd() * 0.4);
+    mk(ww, Math.min(wh, H - 1), wd, (rnd() - 0.5) * (W - ww), -D / 2 - wd / 2 + 0.01);
+  }
+  if (lot.tower) mk(W + 10, 6, D + 10, 0, 0); // sokkel
 
-  // gevelscherm met screenshot (aan de straatkant = lokale +z)
-  const sw = W - 1.2, sh = sw * 400 / 640;
-  const screenY = Math.max(sh / 2 + 2.2, H - sh / 2 - 1.2);
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(sw + 0.5, sh + 0.5, 0.3), new THREE.MeshStandardMaterial({ color: 0x22272b, roughness: 0.4 }));
-  frame.position.set(0, screenY, D / 2 + 0.15); g.add(frame);
+  // screenshot als gevelpaneel aan de straatkant (lokale +z)
+  const sw = Math.min(W - 1.6, 11), sh = sw * 400 / 640;
+  const topOfFront = tiers[0] || H;
+  const screenY = Math.max(sh / 2 + 1.6, Math.min(topOfFront - sh / 2 - 1.2, 14));
   const scrMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: removed, opacity: removed ? 0.5 : 1 });
   const src = p.thumb || p.prevThumb;
   if (src) loader.load(src, (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; scrMat.map = t; scrMat.needsUpdate = true; });
-  const screen = new THREE.Mesh(new THREE.PlaneGeometry(sw, sh), scrMat); screen.position.set(0, screenY, D / 2 + 0.32); g.add(screen);
-  if (lot.tower) { // toren: scherm op alle vier de gevels
-    for (let k = 1; k < 4; k++) {
-      const s2 = screen.clone(); const f2 = frame.clone();
-      const a = (k * Math.PI) / 2;
-      [s2, f2].forEach((m, mi) => { m.position.set(Math.sin(a) * (D / 2 + (mi ? 0.15 : 0.32)), screenY, Math.cos(a) * (D / 2 + (mi ? 0.15 : 0.32))); m.rotation.y = a; g.add(m); });
-    }
-  }
-  // deur
-  const door = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 3.4), new THREE.MeshStandardMaterial({ color: 0x2c3338 }));
-  door.position.set(0, 1.9, D / 2 + 0.02); g.add(door);
+  const faces = lot.tower ? [0, 1, 2, 3] : [0];
+  faces.forEach((f) => {
+    const a = (f * Math.PI) / 2, dist = (f % 2 ? W : D) / 2 + (lot.tower ? 5 : 0) + 0.06;
+    const frame = new THREE.Mesh(new THREE.PlaneGeometry(sw + 0.5, sh + 0.5), new THREE.MeshBasicMaterial({ color: 0x8c8878 }));
+    const scr = new THREE.Mesh(new THREE.PlaneGeometry(sw, sh), scrMat);
+    const y = lot.tower ? 9 + sh / 2 + 3 : screenY;
+    frame.position.set(Math.sin(a) * dist, y, Math.cos(a) * dist); frame.rotation.y = a;
+    scr.position.set(Math.sin(a) * (dist + 0.03), y, Math.cos(a) * (dist + 0.03)); scr.rotation.y = a;
+    if (lot.tower) { const off = (f % 2 ? W : D) / 2 + 0.06; frame.position.set(Math.sin(a) * off, H * 0.55, Math.cos(a) * off); scr.position.set(Math.sin(a) * (off + 0.03), H * 0.55, Math.cos(a) * (off + 0.03)); }
+    g.add(frame); g.add(scr); scr.userData.key = p.key; pickables.push(scr);
+  });
 
-  // label boven het dak
+  // label boven het gebouw (kaartlabel met halo)
   const label = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, depthWrite: false }));
-  label.scale.set(17, 4, 1); label.position.y = H + 5.5; g.add(label);
+  label.scale.set(20, 4.2, 1); label.position.y = H + 5; label.renderOrder = 5; g.add(label);
 
-  // markering voor de geselecteerde pagina
-  const halo = new THREE.Mesh(new THREE.RingGeometry(Math.max(W, D) * 0.85, Math.max(W, D) * 0.85 + 1.1, 48), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.9 }));
-  halo.rotation.x = -Math.PI / 2; halo.position.y = 0.4; halo.visible = false; g.add(halo);
+  // selectie: gestippelde contour op de grond
+  const halo = new THREE.Mesh(new THREE.RingGeometry(Math.max(W, D) * 0.8, Math.max(W, D) * 0.8 + 0.9, 48), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.95 }));
+  halo.rotation.x = -Math.PI / 2; halo.position.y = 0.12; halo.visible = false; g.add(halo);
 
-  // waarschuwing voor kapotte pagina's
   if (broken) {
     const c = document.createElement("canvas"); c.width = 256; c.height = 128;
     const x = c.getContext("2d"); x.fillStyle = "#c62828"; x.fillRect(0, 0, 256, 128);
-    x.fillStyle = "#fff"; x.font = "700 64px 'Space Grotesk', sans-serif"; x.textAlign = "center"; x.textBaseline = "middle";
+    x.fillStyle = "#fff"; x.font = "700 64px 'Inter', sans-serif"; x.textAlign = "center"; x.textBaseline = "middle";
     x.fillText(p.status ? String(p.status) : "FOUT", 128, 66);
     const warn = new THREE.Mesh(new THREE.PlaneGeometry(5, 2.5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c) }));
-    warn.position.set(0, H + 2.6, D / 2); g.add(warn);
+    warn.position.set(0, H + 1.8, D / 2); g.add(warn);
   }
 
-  [body, screen, frame, door].forEach((m) => { m.userData.key = p.key; pickables.push(m); });
   const world = new THREE.Vector3(lot.x, 0, lot.z);
   const front = new THREE.Vector3(Math.sin(lot.rot), 0, Math.cos(lot.rot));
-  buildings.set(p.key, { p, g, H, W, D, wallMat, roofMat, crown, label, halo, world, front, radius: Math.hypot(W, D) / 2 + 0.6, tower: !!lot.tower });
+  buildings.set(p.key, { p, g, H, W, D, wallMat, roofMat, label, halo, world, front, radius: (lot.tower ? 21 : Math.hypot(W, D) / 2) + 0.4, tower: !!lot.tower, broken });
 });
 
-/* ---------- bomen en lantaarnpalen langs de straten (sfeer) ---------- */
-const treeTrunk = new THREE.CylinderGeometry(0.25, 0.35, 2.4, 6), treeTop = new THREE.IcosahedronGeometry(1.8, 0);
-const trunkMat = new THREE.MeshStandardMaterial({ color: 0x6b4f37, roughness: 1 });
-const leafMat = new THREE.MeshStandardMaterial({ color: 0x5f8f4e, roughness: 0.9, flatShading: true });
-const lampHead = new THREE.SphereGeometry(0.45, 10, 8);
-const lampMat = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffd27a, emissiveIntensity: 0 });
+/* ---------- bomen: ronde kruinen langs de straten en in de parken ---------- */
+const treeGeo = new THREE.SphereGeometry(1.6, 10, 8); treeGeo.scale(1, 0.85, 1); treeGeo.translate(0, 2.2, 0);
 const props = [];
-function prop(x, z, j) {
-  if ((j % 2) === 0) {
-    const t = new THREE.Group(); t.position.set(x, 0, z);
-    const tr = new THREE.Mesh(treeTrunk, trunkMat); tr.position.y = 1.2; t.add(tr);
-    const tp = new THREE.Mesh(treeTop, leafMat); tp.position.y = 3.4; tp.rotation.y = j; t.add(tp);
-    scene.add(t); props.push({ x, z, r: 0.8 });
-  } else {
-    const l = new THREE.Group(); l.position.set(x, 0, z);
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 5, 6), poleMat); pole.position.y = 2.5; l.add(pole);
-    const head = new THREE.Mesh(lampHead, lampMat); head.position.y = 5.1; l.add(head);
-    scene.add(l); props.push({ x, z, r: 0.5 });
-  }
-}
+function tree(x, z, s = 1) { const t = new THREE.Mesh(treeGeo, mats.tree); t.position.set(x, 0, z); t.scale.setScalar(s); scene.add(t); props.push({ x, z, r: 1.2 * s }); }
 streets.forEach((s) => {
   for (const side of [-1, 1]) {
-    let j = side > 0 ? 1 : 0;
-    for (let z = ROAD_W / 2 + 12 + LOT / 2; z < s.z1 - 6; z += LOT) prop(s.x + side * walkOff, z, j++);
-    for (let z = -(ROAD_W / 2 + 12 + LOT / 2); z > s.z0 + 6; z -= LOT) prop(s.x + side * walkOff, z, j++);
+    for (let z = ROAD_W / 2 + 14 + LOT / 2; z < s.z1 - 6; z += LOT * 2) tree(s.x + side * walkOff, z, 0.8);
+    for (let z = -(ROAD_W / 2 + 14 + LOT / 2); z > s.z0 + 6; z -= LOT * 2) tree(s.x + side * walkOff, z, 0.8);
   }
 });
-for (let x = PLAZA_R + 20; x < bx1 - 20; x += 22) for (const sz of [-1, 1]) if (!xs.some((cx) => Math.abs(cx - x) < 12)) prop(x, sz * walkOff, Math.round(x / 22));
-for (let x = -PLAZA_R - 20; x > bx0 + 20; x -= 22) for (const sz of [-1, 1]) if (!xs.some((cx) => Math.abs(cx - x) < 12)) prop(x, sz * walkOff, Math.round(-x / 22));
+for (let i = 0; i < 14; i++) { const a = (i / 14) * Math.PI * 2, r = PLAZA_R - ROAD_W / 2 - 8; tree(Math.cos(a) * r, Math.sin(a) * r, 1.1); }
 
 /* ---------- auto ---------- */
 const car = new THREE.Group(); scene.add(car);
-const carPaint = new THREE.MeshStandardMaterial({ roughness: 0.35, metalness: 0.3 });
+const carPaint = new THREE.MeshLambertMaterial();
 const carBody = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.8, 4.2), carPaint); carBody.position.y = 0.75; car.add(carBody);
-const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.7, 2.1), new THREE.MeshStandardMaterial({ color: 0x1c2833, roughness: 0.15, metalness: 0.6 }));
+const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.7, 2.1), new THREE.MeshLambertMaterial({ color: 0x2a3338 }));
 cabin.position.set(0, 1.45, -0.25); car.add(cabin);
 const wheelGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.35, 16); wheelGeo.rotateZ(Math.PI / 2);
-const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.8 });
+const wheelMat = new THREE.MeshLambertMaterial({ color: 0x1a1a1a });
 const wheels = [[-1.1, 1.35], [1.1, 1.35], [-1.1, -1.35], [1.1, -1.35]].map(([x, z]) => { const w = new THREE.Mesh(wheelGeo, wheelMat); w.position.set(x, 0.42, z); car.add(w); return w; });
-const lightMat = new THREE.MeshStandardMaterial({ color: 0xfff6d8, emissive: 0xfff2c0, emissiveIntensity: 0.2 });
-[-0.7, 0.7].forEach((x) => { const l = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.22, 0.05), lightMat); l.position.set(x, 0.85, 2.11); car.add(l); });
 const headlight = new THREE.SpotLight(0xfff2c8, 0, 60, 0.55, 0.6, 1.2); headlight.position.set(0, 1, 2); car.add(headlight);
 const hlTarget = new THREE.Object3D(); hlTarget.position.set(0, 0, 14); car.add(hlTarget); headlight.target = hlTarget;
 
-const START = { x: PLAZA_R + 4, z: 3.5, heading: Math.PI / 2 };
+const firstEast = Math.min(...xs.filter((x) => x > 0), PLAZA_R + 60);
+const START = { x: firstEast - 26, z: 3.2, heading: Math.PI / 2 };
 const state = { ...START, speed: 0 };
 car.position.set(state.x, 0, state.z);
 
-/* ---------- thema: dag (licht) of avond (donker) ---------- */
+/* ---------- thema ---------- */
 function applyTheme() {
-  const dark = isDark();
-  const sky = new THREE.Color(dark ? "#0f1624" : "#cfe0ea");
-  scene.background = sky; scene.fog = new THREE.Fog(sky, 140, dark ? 520 : 760);
-  hemi.intensity = dark ? 0.55 : 1.5; sun.intensity = dark ? 0.35 : 1.6;
-  hemi.color.set(dark ? "#8fa3c4" : "#ffffff");
-  groundMat.color.set(dark ? "#1d2a22" : "#9fb98f");
-  plazaMat.color.set(dark ? "#3a3f45" : "#d9d6cf");
-  sidewalkMat.color.set(dark ? "#4b5157" : "#c9c6c0");
-  lampMat.emissiveIntensity = dark ? 1.4 : 0; lightMat.emissiveIntensity = dark ? 2 : 0.2;
-  headlight.intensity = dark ? 60 : 0;
+  const dark = isDark(); P = dark ? PAL.dark : PAL.light;
+  scene.background = new THREE.Color(P.fog);
+  scene.fog = new THREE.Fog(P.fog, 260, 1100);
+  ambient.intensity = dark ? 0.7 : 0.95; sun.intensity = dark ? 1.3 : 2.3;
+  mats.ground.color.set(P.ground); mats.park.color.set(P.park); mats.road.color.set(P.road);
+  mats.kerb.color.set(P.kerb); mats.walk.color.set(P.walk); mats.tree.color.set(P.tree); mats.parkEdge.color.set(P.parkEdge);
+  headlight.intensity = dark ? 40 : 0;
   carPaint.color.set(css("--accent"));
+  groundTexts.forEach((t) => t.redraw());
   buildings.forEach((b) => {
-    b.wallMat.emissiveIntensity = dark ? 0.85 : 0;
-    const c = new THREE.Color(css(stateVar(b.p)));
-    b.roofMat.color = c; b.crown.material.color = c; b.crown.material.emissive = c;
+    b.wallMat.color.set(b.broken ? (dark ? "#3a3d40" : "#a9a69c") : P.wall);
+    const v = stateVar(b.p);
+    b.roofMat.color = v ? new THREE.Color(P.roof).lerp(new THREE.Color(css(v)), 0.55) : new THREE.Color(P.roof);
     b.halo.material.color = new THREE.Color(css("--accent"));
     if (b.label.material.map) b.label.material.map.dispose();
     b.label.material.map = labelTexture(b.p); b.label.material.needsUpdate = true;
@@ -712,16 +700,19 @@ const toMini = (x, z) => [MS / 2 + (x - mcx) * mScale, MS / 2 + (z - mcz) * mSca
 function drawMinimapBase() {
   const c = document.createElement("canvas"); c.width = c.height = MS;
   const x = c.getContext("2d");
-  x.fillStyle = css("--surface"); x.fillRect(0, 0, MS, MS);
-  x.strokeStyle = css("--muted"); x.lineCap = "round"; x.lineWidth = Math.max(2, ROAD_W * mScale);
+  x.fillStyle = P.ground; x.fillRect(0, 0, MS, MS);
   const [ox, oy] = toMini(0, 0);
+  x.fillStyle = P.park; x.beginPath(); x.arc(ox, oy, (PLAZA_R - half) * mScale, 0, Math.PI * 2); x.fill();
+  x.strokeStyle = P.kerb; x.lineCap = "round"; x.lineWidth = Math.max(2.5, ROAD_W * mScale);
   x.beginPath(); x.arc(ox, oy, PLAZA_R * mScale, 0, Math.PI * 2); x.stroke();
   const seg = (a, b, c2, d) => { const [p, q] = toMini(a, b), [r, t] = toMini(c2, d); x.beginPath(); x.moveTo(p, q); x.lineTo(r, t); x.stroke(); };
-  seg(bx0 + 10, 0, -PLAZA_R, 0); seg(PLAZA_R, 0, bx1 - 10, 0);
+  seg(bx0 + 14, 0, -PLAZA_R, 0); seg(PLAZA_R, 0, bx1 - 14, 0);
   streets.forEach((s) => seg(s.x, s.z0, s.x, s.z1));
   buildings.forEach((b) => {
     const [px, py] = toMini(b.world.x, b.world.z);
-    x.fillStyle = css(stateVar(b.p)); const s = b.tower ? 8 : 5; x.fillRect(px - s / 2, py - s / 2, s, s);
+    const v = stateVar(b.p);
+    x.fillStyle = v ? css(v) : P.wall; x.strokeStyle = P.ink; x.lineWidth = 0.5;
+    const s = b.tower ? 8 : 5; x.fillRect(px - s / 2, py - s / 2, s, s); x.strokeRect(px - s / 2, py - s / 2, s, s);
   });
   miniBase = c;
 }
@@ -730,11 +721,11 @@ function drawMinimap() {
   mctx.drawImage(miniBase, 0, 0);
   if (selected && buildings.get(selected)) {
     const b = buildings.get(selected); const [px, py] = toMini(b.world.x, b.world.z);
-    mctx.strokeStyle = css("--ink"); mctx.lineWidth = 2; mctx.strokeRect(px - 5, py - 5, 10, 10);
+    mctx.strokeStyle = css("--accent"); mctx.lineWidth = 2; mctx.strokeRect(px - 5, py - 5, 10, 10);
   }
   const [cx, cy] = toMini(state.x, state.z);
   mctx.save(); mctx.translate(cx, cy); mctx.rotate(-state.heading + Math.PI / 2);
-  mctx.fillStyle = css("--ink"); mctx.beginPath(); mctx.moveTo(6, 0); mctx.lineTo(-4, 4); mctx.lineTo(-4, -4); mctx.closePath(); mctx.fill();
+  mctx.fillStyle = css("--accent"); mctx.beginPath(); mctx.moveTo(7, 0); mctx.lineTo(-4, 4.5); mctx.lineTo(-4, -4.5); mctx.closePath(); mctx.fill();
   mctx.restore();
 }
 mini.addEventListener("click", (e) => {
@@ -749,10 +740,9 @@ mini.addEventListener("click", (e) => {
 let selected = null;
 function driveTo(key) {
   const b = buildings.get(key); if (!b) return;
-  // zet de auto op straat voor de gevel, met de neus richting het gebouw
-  const p = b.world.clone().add(b.front.clone().multiplyScalar(b.tower ? 26 : SET + 2 - (b.D / 2) + 3));
+  const p = b.tower ? new THREE.Vector3(0, 0, PLAZA_R - 2) : b.world.clone().add(b.front.clone().multiplyScalar(SET + 2.5));
   state.x = p.x; state.z = p.z; state.speed = 0;
-  state.heading = Math.atan2(-b.front.x, -b.front.z);
+  state.heading = b.tower ? Math.PI : Math.atan2(-b.front.x, -b.front.z);
   camState.snap = true;
   window.selectPage(key, false);
   renderer.domElement.focus({ preventScroll: true });
@@ -765,8 +755,6 @@ window.SCENE = {
   },
   driveTo
 };
-const initial = document.querySelector("#table tbody tr.sel");
-if (initial) window.selectPage(initial.dataset.key, false);
 
 /* ---------- invoer ---------- */
 const keys = new Set();
@@ -786,11 +774,18 @@ document.querySelectorAll("[data-touch]").forEach((btn) => {
   btn.addEventListener("pointerdown", on); btn.addEventListener("pointerup", off); btn.addEventListener("pointerleave", off); btn.addEventListener("pointercancel", off);
 });
 
-const camState = { mode: "chase", snap: true };
+// standaard: schuin bovenaanzicht (kaart), C wisselt naar achter de auto
+const camState = { mode: "map", snap: true, zoom: 1.45 };
 const btnCam = document.getElementById("btn-cam");
-function toggleCam() { camState.mode = camState.mode === "chase" ? "air" : "chase"; btnCam.setAttribute("aria-pressed", String(camState.mode === "air")); btnCam.textContent = camState.mode === "air" ? "Vogelvlucht" : "Achter de auto"; }
+function syncCamBtn() { btnCam.textContent = camState.mode === "map" ? "Achter de auto" : "Kaartweergave"; btnCam.setAttribute("aria-pressed", "false"); }
+function toggleCam() { camState.mode = camState.mode === "map" ? "chase" : "map"; syncCamBtn(); }
+syncCamBtn();
 btnCam.addEventListener("click", toggleCam);
 document.getElementById("btn-home").addEventListener("click", () => driveTo(root.key));
+renderer.domElement.addEventListener("wheel", (e) => {
+  if (camState.mode !== "map") return;
+  e.preventDefault(); camState.zoom = Math.max(0.35, Math.min(2.6, camState.zoom * (e.deltaY > 0 ? 1.1 : 0.9)));
+}, { passive: false });
 
 const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
 let downAt = null;
@@ -810,16 +805,16 @@ renderer.domElement.addEventListener("pointermove", (e) => {
   renderer.domElement.style.cursor = ray.intersectObjects(pickables, false).length ? "pointer" : "default";
 });
 
-/* ---------- natuurkunde (eenvoudig) ---------- */
+/* ---------- rijden ---------- */
 const speedEl = document.getElementById("speed");
 const nearEl = document.getElementById("near");
 let nearKey = null;
 function step(dt) {
   const max = keys.has("boost") ? 70 : 38;
-  const acc = 34, brake = 70, drag = 0.9;
+  const acc = 34, brake = 70;
   if (keys.has("up")) state.speed += acc * dt;
   else if (keys.has("down")) state.speed -= (state.speed > 0 ? brake : acc * 0.6) * dt;
-  else state.speed -= Math.sign(state.speed) * Math.min(Math.abs(state.speed), drag * 10 * dt);
+  else state.speed -= Math.sign(state.speed) * Math.min(Math.abs(state.speed), 9 * dt);
   if (keys.has("brake")) state.speed -= Math.sign(state.speed) * Math.min(Math.abs(state.speed), brake * dt);
   state.speed = Math.max(-14, Math.min(max, state.speed));
   if (!keys.has("boost") && state.speed > 38) state.speed -= 40 * dt;
@@ -828,23 +823,19 @@ function step(dt) {
   state.heading += steer * 1.9 * dt * grip * Math.sign(state.speed || 1);
   let nx = state.x + Math.sin(state.heading) * state.speed * dt;
   let nz = state.z + Math.cos(state.heading) * state.speed * dt;
-  // botsen: gebouwen (cirkel) en aankleding
   const CAR_R = 2.1;
-  buildings.forEach((b) => {
-    const dx = nx - b.world.x, dz = nz - b.world.z, d = Math.hypot(dx, dz), min = b.radius + CAR_R;
-    if (d < min && d > 0.001) { nx = b.world.x + (dx / d) * min; nz = b.world.z + (dz / d) * min; state.speed *= 0.3; }
-  });
-  props.forEach((o) => {
-    const dx = nx - o.x, dz = nz - o.z, d = Math.hypot(dx, dz), min = o.r + CAR_R * 0.8;
-    if (d < min && d > 0.001) { nx = o.x + (dx / d) * min; nz = o.z + (dz / d) * min; state.speed *= 0.6; }
-  });
+  const push = (ox, oz, r, damp) => {
+    const dx = nx - ox, dz = nz - oz, d = Math.hypot(dx, dz), min = r + CAR_R;
+    if (d < min && d > 0.001) { nx = ox + (dx / d) * min; nz = oz + (dz / d) * min; state.speed *= damp; }
+  };
+  buildings.forEach((b) => push(b.world.x, b.world.z, b.radius, 0.3));
+  props.forEach((o) => push(o.x, o.z, o.r, 0.6));
   if (nx < bx0 - 60 || nx > bx1 + 60 || nz < bz0 - 60 || nz > bz1 + 60) { nx = Math.max(bx0 - 60, Math.min(bx1 + 60, nx)); nz = Math.max(bz0 - 60, Math.min(bz1 + 60, nz)); state.speed = 0; }
   state.x = nx; state.z = nz;
   car.position.set(state.x, 0, state.z); car.rotation.y = state.heading;
   wheels.forEach((w) => (w.rotation.x += state.speed * dt / 0.42));
   speedEl.textContent = Math.round(Math.abs(state.speed) * 3) + " km/u";
 
-  // dichtstbijzijnde gebouw: paneel volgt mee tijdens het rijden
   let best = null, bd = 1e9;
   buildings.forEach((b) => { const d = Math.hypot(b.world.x - state.x, b.world.z - state.z) - b.radius; if (d < bd) { bd = d; best = b; } });
   const k = best && bd < 14 ? best.p.key : null;
@@ -861,22 +852,28 @@ function updateCamera(dt) {
   const fwd = new THREE.Vector3(Math.sin(state.heading), 0, Math.cos(state.heading));
   let want, look;
   if (camState.mode === "chase") {
+    camera.fov = 58;
     want = new THREE.Vector3(state.x, 7.5, state.z).addScaledVector(fwd, -15);
     look = new THREE.Vector3(state.x, 4, state.z).addScaledVector(fwd, 10);
   } else {
-    want = new THREE.Vector3(state.x, 120, state.z).addScaledVector(fwd, -70);
-    look = new THREE.Vector3(state.x, 0, state.z).addScaledVector(fwd, 10);
+    camera.fov = 38;
+    // vaste kijkrichting (zuidoost → noordwest), zoals een kaart; de auto blijft in het midden
+    const dist = 150 * camState.zoom;
+    want = new THREE.Vector3(state.x + dist * 0.42, dist * 0.74, state.z + dist * 0.62);
+    look = new THREE.Vector3(state.x, 0, state.z);
   }
+  camera.updateProjectionMatrix();
   if (camState.snap || reduce) { camPos.copy(want); camLook.copy(look); camState.snap = false; }
-  else { const k = 1 - Math.exp(-dt * 5); camPos.lerp(want, k); camLook.lerp(look, k); }
+  else { const k = 1 - Math.exp(-dt * 4); camPos.lerp(want, k); camLook.lerp(look, k); }
   camera.position.copy(camPos); camera.lookAt(camLook);
 }
 
-/* ---------- labels: vervagen met afstand ---------- */
 function updateLabels() {
+  // alleen labels rond de auto (en van de gekozen pagina en de homepage), zoals een kaart die op zoomniveau filtert
+  const far = camState.mode === "map" ? 70 * camState.zoom + 20 : 120;
   buildings.forEach((b) => {
-    const d = camera.position.distanceTo(b.world);
-    b.label.material.opacity = b.p.key === selected ? 1 : Math.max(0, Math.min(1, (camState.mode === "air" ? 320 : 170) - d) / 60);
+    const d = Math.hypot(b.world.x - state.x, b.world.z - state.z);
+    b.label.material.opacity = b.p.key === selected || b.tower ? 1 : Math.max(0, Math.min(1, (far - d) / 25));
     b.label.visible = b.label.material.opacity > 0.02;
   });
 }
@@ -890,6 +887,8 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme
 new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 document.fonts.ready.then(applyTheme);
 applyTheme();
+const initial = document.querySelector("#table tbody tr.sel");
+if (initial) window.selectPage(initial.dataset.key, false);
 
 const clock = new THREE.Clock();
 renderer.setAnimationLoop(() => {

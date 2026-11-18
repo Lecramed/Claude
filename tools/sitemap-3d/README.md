@@ -2,7 +2,7 @@
 
 Een 3D-weergave van de sitemap van een website, met per pagina een screenshot, het paginagewicht en de verschillen met de vorige meting. Twee weergaven:
 
-- **Sitemap-stad** (`report/<site>/index.html`): elke pagina is een gebouw waar je met een auto langs rijdt. De homepage is de toren op het plein, elke sectie is een dwarsstraat. Gebouwhoogte = paginagewicht (lineair), dakkleur = verschil met de vorige meting, gevelscherm = screenshot. Rijden met pijltjes/WASD, Shift = turbo, Spatie = rem, C = vogelvlucht, R = terug naar start. Op een telefoon verschijnen stuurknoppen.
+- **Sitemap-stad** (`report/<site>/index.html`): elke pagina is een gebouw in een 3D-kaart (egale blokken, witte wegen met straatnamen, parken) waar je met een auto doorheen rijdt. De homepage is de toren in het middenpark, elke sectie is een dwarsstraat. Standaard kijk je schuin van bovenaf; C wisselt naar achter de auto, scrollen zoomt. Gebouwhoogte = paginagewicht (lineair), dakkleur = verschil met de vorige meting, gevelscherm = screenshot. Rijden met pijltjes/WASD, Shift = turbo, Spatie = rem, C = vogelvlucht, R = terug naar start. Op een telefoon verschijnen stuurknoppen.
 - **Sitemap-boom** (`report/<site>/sitemap.html`): radiale boom met zuilen.
 
 ## Meting uitvoeren
