@@ -11,8 +11,8 @@ const fs = require("fs");
 const path = require("path");
 
 const TOOL_DIR = __dirname;
-const RUNS_DIR = path.join(TOOL_DIR, "runs");
-const OUT_DIR = path.join(TOOL_DIR, "report");
+let RUNS_DIR = path.join(TOOL_DIR, "runs", "local");
+let OUT_DIR = path.join(TOOL_DIR, "report", "local");
 
 function readRun(id) {
   return JSON.parse(fs.readFileSync(path.join(RUNS_DIR, id, "run.json"), "utf8"));
@@ -53,7 +53,35 @@ function treeParents(pages) {
   return pages.map((p) => ({ key: p.key, parent: parent.get(p.key), depth: d(p.key) }));
 }
 
-function build(runId) {
+/* Leesbare paginanamen: de titel als die uniek is, anders afgeleid uit het pad
+   (bv. "Vacature/Monteur-Afleveraar/VAC01322" → "Monteur Afleveraar (VAC01322)"). */
+function pageNames(pages) {
+  const first = (t) => (t || "").split(/\s[—|–-]\s/)[0].trim();
+  const count = new Map();
+  pages.forEach((p) => { const t = first(p.title); count.set(t, (count.get(t) || 0) + 1); });
+  const fromPath = (key) => {
+    const u = new URL(key, "http://x/");
+    const id = u.searchParams.get("id");
+    if (id) return { name: id, code: null };
+    const segs = u.pathname.split("/").filter(Boolean).map((s) => { try { return decodeURIComponent(s); } catch { return s; } });
+    if (!segs.length || /^index\.html?$/.test(segs[0])) return { name: "Home", code: null };
+    const code = segs.length > 1 && /^[A-Z]{2,}\d{3,}$/.test(segs[segs.length - 1]) ? segs.pop() : null;
+    return { name: segs[segs.length - 1], code, section: segs.length > 1 ? segs[0] : null };
+  };
+  const pretty = (s) => s.replace(/\.html?$/, "").replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim().replace(/^./, (c) => c.toUpperCase());
+  const names = pages.map((p) => {
+    const t = first(p.title);
+    if (t && count.get(t) === 1 && !/not be found|404/i.test(t)) return t;
+    const f = fromPath(p.key);
+    let n = pretty(f.name);
+    if (f.section && !f.code) n = pretty(f.section) + " · " + n;
+    return f.code ? `${n} (${f.code})` : n;
+  });
+  return new Map(pages.map((p, i) => [p.key, names[i]]));
+}
+
+function build(runId, runsDir) {
+  if (runsDir) { RUNS_DIR = runsDir; OUT_DIR = path.join(TOOL_DIR, "report", path.basename(runsDir)); }
   if (!runId) {
     const ids = fs.readdirSync(RUNS_DIR).filter((d) => fs.existsSync(path.join(RUNS_DIR, d, "run.json"))).sort();
     runId = ids[ids.length - 1];
@@ -72,12 +100,13 @@ function build(runId) {
   };
 
   const tree = new Map(treeParents(run.pages).map((t) => [t.key, t]));
+  const names = pageNames([...run.pages, ...(run.removed || [])]);
   const pages = run.pages.map((p) => {
     const c = p.compare || {};
     return {
-      key: p.key, title: p.title, url: p.url, status: p.status, error: p.error,
+      key: p.key, name: names.get(p.key), title: p.title, url: p.url, status: p.status, error: p.error,
       parent: tree.get(p.key).parent, depth: tree.get(p.key).depth, links: p.links,
-      weight: p.weight, dom: p.dom, timing: p.timing, resources: p.resources.slice(0, 8),
+      weight: p.weight, dom: p.dom, timing: p.timing, resources: p.resources.slice(0, 8), failed: p.failed || [],
       compare: c,
       thumb: b64(path.join(runDir, `${p.slug}.jpg`)),
       prevThumb: c.prevSlug ? b64(path.join(prevDir, `${c.prevSlug}.jpg`)) : null,
@@ -87,7 +116,7 @@ function build(runId) {
     };
   });
   const removed = (run.removed || []).map((r) => ({
-    ...r, prevThumb: b64(path.join(prevDir, `${r.slug}.jpg`)),
+    ...r, name: names.get(r.key), prevThumb: b64(path.join(prevDir, `${r.slug}.jpg`)),
     prevFull: copy(path.join(prevDir, `${r.slug}-full.jpg`), `${r.slug}-prev.jpg`)
   }));
 
@@ -101,11 +130,14 @@ function build(runId) {
     prev: prev ? { id: prev.id, date: prev.date, label: prev.label } : null,
     pages, removed, history
   };
-  const tpl = fs.readFileSync(path.join(TOOL_DIR, "template.html"), "utf8");
-  const html = tpl.replace("/*__REPORT_DATA__*/null", () => JSON.stringify(data).replace(/</g, "\\u003c"));
-  fs.writeFileSync(path.join(OUT_DIR, "index.html"), html);
-  console.log(`Rapport: ${path.relative(process.cwd(), path.join(OUT_DIR, "index.html"))}  (${(html.length / 1024 / 1024).toFixed(1)} MB)`);
+  const json = JSON.stringify(data).replace(/</g, "\\u003c");
+  for (const [tplName, outName] of [["template-city.html", "index.html"], ["template.html", "sitemap.html"]]) {
+    const tpl = fs.readFileSync(path.join(TOOL_DIR, tplName), "utf8");
+    const html = tpl.replace("/*__REPORT_DATA__*/null", () => json).replace("/*__CITY_SCENE__*/", () => fs.readFileSync(path.join(TOOL_DIR, "city-scene.js"), "utf8"));
+    fs.writeFileSync(path.join(OUT_DIR, outName), html);
+    console.log(`Rapport: ${path.relative(process.cwd(), path.join(OUT_DIR, outName))}  (${(html.length / 1024 / 1024).toFixed(1)} MB)`);
+  }
 }
 
 module.exports = { build };
-if (require.main === module) build(process.argv[2]);
+if (require.main === module) build(process.argv[3], process.argv[2] ? path.join(RUNS_DIR, "..", process.argv[2]) : undefined);

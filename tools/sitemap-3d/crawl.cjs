@@ -26,7 +26,7 @@ const { execSync } = require("child_process");
 const { chromium } = require("playwright");
 
 const TOOL_DIR = __dirname;
-const RUNS_DIR = path.join(TOOL_DIR, "runs");
+let RUNS_DIR = path.join(TOOL_DIR, "runs", "local");
 const REPO_ROOT = path.resolve(TOOL_DIR, "..", "..");
 
 /* ---------- argumenten ---------- */
@@ -111,9 +111,11 @@ function typeBucket(cdpType, mime, url) {
   if (t === "script") return "js";
   if (t === "image") return "img";
   if (t === "font") return "font";
+  if (t === "media") return "media";
   if (/css/.test(mime)) return "css";
   if (/javascript/.test(mime)) return "js";
   if (/image/.test(mime)) return "img";
+  if (/video|audio/.test(mime)) return "media";
   if (/font|woff/.test(mime) || /\.woff2?($|\?)/.test(url)) return "font";
   return "other";
 }
@@ -188,6 +190,7 @@ async function measurePage(browser, url) {
   cdp.on("Network.responseReceived", (e) => { const r = reqs.get(e.requestId); if (r) { r.mime = e.response.mimeType; r.status = e.response.status; r.type = e.type || r.type; } });
   cdp.on("Network.dataReceived", (e) => { const r = reqs.get(e.requestId); if (r) r.decoded += e.dataLength; });
   cdp.on("Network.loadingFinished", (e) => { const r = reqs.get(e.requestId); if (r) r.transfer = e.encodedDataLength; });
+  cdp.on("Network.loadingFailed", (e) => { const r = reqs.get(e.requestId); if (r) { r.failed = e.errorText || "failed"; r.blocked = e.blockedReason || null; } });
 
   let status = 0, error = null;
   try {
@@ -216,9 +219,10 @@ async function measurePage(browser, url) {
 
   const byType = {};
   let transfer = 0, decoded = 0, count = 0;
-  const resources = [];
+  const resources = [], failed = [];
   for (const r of reqs.values()) {
     if (r.url.startsWith("data:")) continue;
+    if (r.failed) { failed.push({ url: r.url, type: typeBucket(r.type, r.mime, r.url), error: r.failed }); continue; }
     const b = typeBucket(r.type, r.mime, r.url);
     byType[b] = byType[b] || { bytes: 0, count: 0 };
     byType[b].bytes += r.transfer; byType[b].count++;
@@ -226,7 +230,7 @@ async function measurePage(browser, url) {
     resources.push({ url: r.url, type: b, bytes: r.transfer, status: r.status });
   }
   resources.sort((a, b) => b.bytes - a.bytes);
-  return { status, error, info, viewportPng, fullPng, weight: { transfer, decoded, requests: count, byType }, resources };
+  return { status, error, info, viewportPng, fullPng, weight: { transfer, decoded, requests: count, byType }, resources, failed };
 }
 
 /* ---------- vergelijken met vorige meting ---------- */
@@ -240,7 +244,7 @@ function latestRunBefore(currentId) {
 (async () => {
   let server = null, baseUrl;
   const root = path.resolve(args.root || REPO_ROOT);
-  if (args.url) baseUrl = new URL(args.url).toString();
+  if (args.url) { baseUrl = new URL(args.url).toString(); RUNS_DIR = path.join(TOOL_DIR, "runs", new URL(baseUrl).hostname.replace(/^www\./, "")); }
   else {
     server = await startServer(root);
     baseUrl = `http://127.0.0.1:${server.address().port}/`;
@@ -283,7 +287,8 @@ function latestRunBefore(currentId) {
       weight: m.weight,
       dom: { nodes: m.info.domNodes, svg: m.info.inlineSvg, images: m.info.images, height: m.info.height },
       timing: { domContentLoaded: m.info.domContentLoaded, load: m.info.load },
-      resources: m.resources.slice(0, 25)
+      resources: m.resources.slice(0, 25),
+      failed: m.failed
     });
     console.log(`${(m.weight.transfer / 1024).toFixed(1)} KB, ${m.weight.requests} req`);
   }
@@ -333,5 +338,5 @@ function latestRunBefore(currentId) {
   fs.writeFileSync(path.join(runDir, "run.json"), JSON.stringify(run, null, 2));
   console.log(`\nMeting opgeslagen: ${path.relative(REPO_ROOT, runDir)}  (${pages.length} pagina's${prevId ? `, vergeleken met ${prevId}` : ", eerste meting"})`);
 
-  require("./build-report.cjs").build(runId);
+  require("./build-report.cjs").build(runId, RUNS_DIR);
 })().catch((e) => { console.error(e); process.exit(1); });

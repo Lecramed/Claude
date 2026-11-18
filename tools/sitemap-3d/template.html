@@ -10,7 +10,7 @@
   --bg: #eceff1; --surface: #ffffff; --stage: #e2e7ea; --ink: #1b2227; --muted: #5a6670; --line: #d2d9de;
   --accent: #0e7c78; --accent-soft: #d3ece9;
   --up: #cc4a2e; --down: #23905a; --new: #6448cc; --gone: #8b939a; --same: #9aa6ae;
-  --t-html: #4f7cac; --t-css: #2f9f9a; --t-js: #d99a2b; --t-img: #c75a7c; --t-font: #8a68c4; --t-other: #9aa3ab;
+  --t-html: #4f7cac; --t-css: #2f9f9a; --t-js: #d99a2b; --t-img: #c75a7c; --t-font: #8a68c4; --t-media: #b0553a; --t-other: #9aa3ab;
   --f-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
   --f-body: "Inter", "Segoe UI", system-ui, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -20,13 +20,13 @@
   --bg: #12171b; --surface: #1a2026; --stage: #0d1215; --ink: #e4e9ec; --muted: #94a2ac; --line: #2a333b;
   --accent: #3bbab4; --accent-soft: #163a39;
   --up: #ff7b5c; --down: #58d08a; --new: #a28dff; --gone: #6f7880; --same: #5f6d77;
-  --t-html: #6f9bd0; --t-css: #47c1bb; --t-js: #f0b44a; --t-img: #e47c9c; --t-font: #ab8ce6; --t-other: #7f8a93;
+  --t-html: #6f9bd0; --t-css: #47c1bb; --t-js: #f0b44a; --t-img: #e47c9c; --t-font: #ab8ce6; --t-media: #e88a66; --t-other: #7f8a93;
   color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #12171b; --surface: #1a2026; --stage: #0d1215; --ink: #e4e9ec; --muted: #94a2ac; --line: #2a333b;
   --accent: #3bbab4; --accent-soft: #163a39;
   --up: #ff7b5c; --down: #58d08a; --new: #a28dff; --gone: #6f7880; --same: #5f6d77;
-  --t-html: #6f9bd0; --t-css: #47c1bb; --t-js: #f0b44a; --t-img: #e47c9c; --t-font: #ab8ce6; --t-other: #7f8a93;
+  --t-html: #6f9bd0; --t-css: #47c1bb; --t-js: #f0b44a; --t-img: #e47c9c; --t-font: #ab8ce6; --t-media: #e88a66; --t-other: #7f8a93;
   color-scheme: dark; }
 
 * { box-sizing: border-box; }
@@ -63,6 +63,7 @@ button { font: inherit; color: inherit; }
 .tools { position: absolute; right: 10px; top: 10px; display: flex; gap: 6px; }
 .tools button { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
 .tools button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+.fails { font-size: 12px; color: var(--muted); }
 .err { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; color: var(--muted); }
 
 /* ---------- detailpaneel ---------- */
@@ -165,17 +166,18 @@ td .t { display: inline-block; max-width: 300px; overflow: hidden; text-overflow
   const R = window.REPORT;
   const fmt1 = new Intl.NumberFormat("nl-NL", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const fmt0 = new Intl.NumberFormat("nl-NL");
-  const kb = (b) => fmt1.format(b / 1024) + " KB";
+  const kb = (b) => (b >= 1048576 ? fmt1.format(b / 1048576) + " MB" : fmt1.format(b / 1024) + " KB");
   const sign = (n) => (n > 0 ? "+" : n < 0 ? "−" : "±");
-  const dKB = (b) => (b == null ? "" : Math.abs(b) < 52 ? "±0 KB" : sign(b) + fmt1.format(Math.abs(b) / 1024) + " KB");
+  const dKB = (b) => (b == null ? "" : Math.abs(b) < 52 ? "±0 KB" : sign(b) + kb(Math.abs(b)));
   const dN = (n) => (n == null ? "" : n === 0 ? "±0" : sign(n) + fmt0.format(Math.abs(n)));
   const dCls = (n, tol = 52) => (n == null || Math.abs(n) < tol ? "zero" : n > 0 ? "up" : "down");
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const dateFmt = (iso) => new Date(iso).toLocaleString("nl-NL", { dateStyle: "medium", timeStyle: "short" });
-  const TYPES = [["html", "HTML"], ["css", "CSS"], ["js", "JavaScript"], ["img", "Afbeeldingen"], ["font", "Fonts"], ["other", "Overig"]];
+  const TYPES = [["html", "HTML"], ["css", "CSS"], ["js", "JavaScript"], ["img", "Afbeeldingen"], ["font", "Fonts"], ["media", "Video"], ["other", "Overig"]];
   const STATUS = { changed: "Gewijzigd", same: "Ongewijzigd", new: "Nieuw", baseline: "Eerste meting", removed: "Verwijderd" };
 
   function shortName(p) {
+    if (p.name) return p.name;
     const q = p.key.match(/\?id=(.+)$/);
     if (q) return decodeURIComponent(q[1]).replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
     const t = (p.title || "").split(/\s[—|–-]\s/)[0].trim();
@@ -189,7 +191,7 @@ td .t { display: inline-block; max-width: 300px; overflow: hidden; text-overflow
   const total = R.pages.reduce((s, p) => s + p.weight.transfer, 0);
   const prevTotal = R.history.length > 1 ? R.history[R.history.length - 2].transfer : null;
   const home = R.pages.find((p) => !p.parent) || R.pages[0];
-  document.getElementById("site-title").textContent = home.name || "Website";
+  document.getElementById("site-title").textContent = /^https?:/.test(R.run.base) ? new URL(R.run.base).hostname.replace(/^www\./, "") : home.name || "Website";
   document.getElementById("runs").innerHTML =
     `<div>Deze meting: <b>${esc(dateFmt(R.run.date))}</b> · <span class="mono">${esc(R.run.label)}</span></div>` +
     (R.prev ? `<div>Vorige meting: <b>${esc(dateFmt(R.prev.date))}</b> · <span class="mono">${esc(R.prev.label)}</span></div>` : `<div>Dit is de eerste meting; de volgende wordt hiermee vergeleken.</div>`);
@@ -248,6 +250,8 @@ td .t { display: inline-block; max-width: 300px; overflow: hidden; text-overflow
         <span class="chip ${p.state}">${STATUS[p.state]}</span>
         <h2>${esc(p.name)}</h2>
         <div class="path">${esc(p.key)}${p.status && p.status !== 200 ? ` · HTTP ${p.status}` : ""}${p.error ? ` · ${esc(p.error)}` : ""}</div>
+        ${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener" style="font-size:12px">Open de pagina ↗</a>` : ""}
+        ${window.SCENE && window.SCENE.driveTo ? `<button type="button" class="drive" data-drive>Rijd hierheen</button>` : ""}
       </header>
       <div>
         <div class="eyebrow">Paginagewicht (overdracht)</div>
@@ -273,7 +277,9 @@ td .t { display: inline-block; max-width: 300px; overflow: hidden; text-overflow
       <div style="display:grid;gap:6px">
         <div class="eyebrow">Grootste bestanden</div>
         <ul class="res">${p.resources.slice(0, 6).map((r) => `<li><i class="sw" style="background:var(--t-${r.type})"></i><span class="u" title="${esc(r.url)}">${esc(r.url.replace(/^https?:\/\/[^/]+\//, (m) => (m.includes("127.0.0.1") ? "/" : m)))}</span><span class="mono">${kb(r.bytes)}</span></li>`).join("")}</ul>
-      </div>`;
+      </div>
+      ${p.failed && p.failed.length ? `<div class="fails"><span class="eyebrow">Niet geladen (${p.failed.length})</span><br>${[...new Set(p.failed.map((f) => f.url.split("/")[2]))].map(esc).join(", ")}</div>` : ""}`;
+    const dr = panel.querySelector("[data-drive]"); if (dr) dr.addEventListener("click", () => window.SCENE.driveTo(key));
     panel.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => { shotTab = b.dataset.tab; renderPanel(key); }));
   }
 

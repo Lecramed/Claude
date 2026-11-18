@@ -1,13 +1,18 @@
 # Sitemap 3D
 
-Een 3D-weergave van de sitemap van de site, met per pagina een screenshot, het paginagewicht en de verschillen met de vorige meting.
+Een 3D-weergave van de sitemap van een website, met per pagina een screenshot, het paginagewicht en de verschillen met de vorige meting. Twee weergaven:
+
+- **Sitemap-stad** (`report/<site>/index.html`): elke pagina is een gebouw waar je met een auto langs rijdt. De homepage is de toren op het plein, elke sectie is een dwarsstraat. Gebouwhoogte = paginagewicht (lineair), dakkleur = verschil met de vorige meting, gevelscherm = screenshot. Rijden met pijltjes/WASD, Shift = turbo, Spatie = rem, C = vogelvlucht, R = terug naar start. Op een telefoon verschijnen stuurknoppen.
+- **Sitemap-boom** (`report/<site>/sitemap.html`): radiale boom met zuilen.
 
 ## Meting uitvoeren
 
 ```bash
 node tools/sitemap-3d/crawl.cjs                       # lokale bestanden in deze repo
-node tools/sitemap-3d/crawl.cjs --url https://jouw-domein.nl   # live site
+node tools/sitemap-3d/crawl.cjs --url https://www.werkenbijvegro.nl/   # live site
 ```
+
+Metingen en rapporten worden per site bewaard (`runs/werkenbijvegro.nl/`, `runs/local/`). Bij een live site moeten alle hosts die de site laadt bereikbaar zijn; verzoeken die niet lukten staan per pagina onder "Niet geladen".
 
 Vereist Node 18+ en Playwright met Chromium (`npm i -g playwright && npx playwright install chromium` als je het nog niet hebt).
 
@@ -27,10 +32,11 @@ Opties: `--root <map>`, `--label <naam>`, `--max <aantal pagina's>`, `--keep-que
 
 ```
 crawl.cjs         crawler + metingen + vergelijking
-build-report.cjs  bouwt report/ uit de laatste meting (los te draaien: node build-report.cjs [run-id])
+build-report.cjs  bouwt report/ uit de laatste meting (los te draaien: node build-report.cjs <site> [run-id])
 template.html     de 3D-weergave (three.js)
-runs/<datum>/     run.json + screenshots per meting; commit deze map, dan blijft "vorige keer" bewaard
-report/           gegenereerd rapport
+template-city.html + city-scene.js   de stad (three.js); city-scene.js wordt in de pagina ingevoegd
+runs/<site>/<datum>/   run.json + screenshots per meting; commit deze map, dan blijft "vorige keer" bewaard
+report/<site>/    gegenereerd rapport
 ```
 
 ## Lezen van de 3D-weergave
