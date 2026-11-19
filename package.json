@@ -1,0 +1,18 @@
+{
+  "name": "keigoed-sitemap-3d",
+  "private": true,
+  "description": "KEIGOED-webshop plus Sitemap 3D: meet websites en bekijk ze als 3D-stad.",
+  "scripts": {
+    "setup": "npm install && npx playwright install chromium",
+    "crawl:local": "node tools/sitemap-3d/crawl.cjs",
+    "crawl:werkenbijvegro": "node tools/sitemap-3d/crawl.cjs --url https://www.werkenbijvegro.nl/",
+    "crawl:vegro": "node tools/sitemap-3d/crawl.cjs --url https://www.vegro.nl/ --exclude /webwinkel --exclude-pattern \"-([a-z]\\d{4,6}|\\d{5})$\" --max 200",
+    "report:local": "node tools/sitemap-3d/build-report.cjs local",
+    "report:werkenbijvegro": "node tools/sitemap-3d/build-report.cjs werkenbijvegro.nl",
+    "report:vegro": "node tools/sitemap-3d/build-report.cjs vegro.nl",
+    "serve": "npx --yes http-server . -p 8080 -c-1 -o /tools/sitemap-3d/report/"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}

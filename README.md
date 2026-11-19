@@ -45,3 +45,20 @@ js/main.js      Paginalogica: productgrids, filters, checkout, FAQ, contactformu
 - Koppel een echte betaalprovider (Mollie, Stripe) aan de afreken-flow.
 - Vervang de gegenereerde SVG-stenen door echte productfoto's.
 - Host de site via GitHub Pages, Netlify of Vercel — het is 100% statisch.
+
+## Sitemap 3D openen in VS Code
+
+```bash
+git clone https://github.com/lecramed/claude.git
+cd claude
+git checkout claude/epic-mendel-qwt7pe
+code .
+npm run setup          # eenmalig: installeert Playwright + Chromium
+```
+
+In VS Code staan de belangrijkste acties onder **Terminal → Run Task…**:
+
+- *Sitemap 3D: meet vegro.nl* / *meet werkenbijvegro.nl* / *meet lokale webshop* — nieuwe meting, vergeleken met de vorige
+- *Sitemap 3D: rapporten bekijken* — start een lokale server en opent `tools/sitemap-3d/report/`
+
+Of via de terminal: `npm run crawl:vegro`, `npm run serve`, enzovoort (zie `package.json`). De steden staan in `tools/sitemap-3d/report/<site>/index.html`; zie `tools/sitemap-3d/README.md` voor alle opties.

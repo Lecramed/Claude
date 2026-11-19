@@ -1,0 +1,4 @@
+{
+  "files.exclude": { "**/node_modules": true },
+  "search.exclude": { "tools/sitemap-3d/runs": true, "tools/sitemap-3d/report": true }
+}

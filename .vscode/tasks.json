@@ -1,0 +1,10 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Sitemap 3D: installeren (eenmalig)", "type": "npm", "script": "setup", "problemMatcher": [] },
+    { "label": "Sitemap 3D: meet vegro.nl", "type": "npm", "script": "crawl:vegro", "problemMatcher": [] },
+    { "label": "Sitemap 3D: meet werkenbijvegro.nl", "type": "npm", "script": "crawl:werkenbijvegro", "problemMatcher": [] },
+    { "label": "Sitemap 3D: meet lokale webshop", "type": "npm", "script": "crawl:local", "problemMatcher": [] },
+    { "label": "Sitemap 3D: rapporten bekijken", "type": "npm", "script": "serve", "problemMatcher": [], "isBackground": true }
+  ]
+}
