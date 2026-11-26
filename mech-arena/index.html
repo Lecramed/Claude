@@ -133,7 +133,9 @@ kbd{font-family:var(--ui);background:#1d2633;border:1px solid #3a4658;border-bot
 #touch button.act{border-color:var(--hazard)}
 #touch button.sp{border-color:var(--cyan)}
 #touch button.on{background:#ffb21a88}
-#pauseBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 84px);left:50%;transform:translateX(-50%);pointer-events:auto;background:#0008;color:#fff;border:1px solid var(--line);padding:6px 10px;font-size:12px;letter-spacing:.15em}
+#hudBtns{position:fixed;top:calc(env(safe-area-inset-top,0px) + 84px);left:50%;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto}
+#hudBtns button{background:#0008;color:#fff;border:1px solid var(--line);padding:6px 10px;font-size:12px;letter-spacing:.15em;white-space:nowrap}
+#touchBtn.on{border-color:var(--hazard);color:var(--hazard)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -163,7 +165,7 @@ kbd{font-family:var(--ui);background:#1d2633;border:1px solid #3a4658;border-bot
     <div class="en e1"><div class="lbl"><span>REACTOR</span><span id="ent1">0%</span></div><div class="track"><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><b id="en1"></b></div></div>
     <div class="en e2"><div class="lbl"><span id="ent2">0%</span><span>REACTOR</span></div><div class="track"><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><b id="en2"></b></div></div>
   </div>
-  <button id="pauseBtn" type="button">PAUZE</button>
+  <div id="hudBtns"><button id="pauseBtn" type="button">PAUZE</button><button id="touchBtn" type="button">TOUCH</button></div>
 </div>
 
 <!-- Touch -->
@@ -288,7 +290,7 @@ kbd{font-family:var(--ui);background:#1d2633;border:1px solid #3a4658;border-bot
         <span><kbd>Esc</kbd> / <kbd>P</kbd></span><span>Pauze</span>
       </div>
       <p class="note" style="margin-top:14px"><b>Combo's:</b> zodra een aanval raakt kun je hem direct afbreken in een andere aanval, bijvoorbeeld <kbd>J</kbd> → <kbd>K</kbd> → <kbd>U</kbd>. In de lucht geeft elke aanvalsknop een duiktrap. Je reactor laadt op door tijd, door te raken en door geraakt te worden.</p>
-      <p class="note"><b>Op telefoon of tablet:</b> raak de linkerhelft van het scherm aan voor de joystick. Duw opzij om te lopen, omhoog om te springen en omlaag om te blokkeren. De knoppen rechts zijn je aanvallen. Speel het liefst met je scherm liggend.</p>
+      <p class="note"><b>Op telefoon of tablet:</b> raak de linkerhelft van het scherm aan voor de joystick. Duw opzij om te lopen, omhoog om te springen en omlaag om te blokkeren. De knoppen rechts zijn je aanvallen. Speel het liefst met je scherm liggend. Zie je geen knoppen? Tik tijdens het gevecht bovenin op <b>TOUCH</b>.</p>
       <p class="note">Win twee rondes om het gevecht te winnen. Overwinningen leveren credits op; perfecte rondes en snelle KO's geven bonussen.</p>
       <button class="btn" id="bHelpClose" type="button" style="margin-top:8px">Begrepen</button>
     </div>
@@ -1159,7 +1161,7 @@ function startMatch(idx){
   ai=new AI(p2,o.ai);
   G.mode='fight';G.wins=[0,0];G.round=1;G.stats={perfect:0,timeLeft:0,maxCombo:0};
   $('#n1').textContent=p1.name;$('#n2').textContent=o.name;
-  renderPips();showScreen(null);$('#hud').hidden=false;$('#touch').hidden=!isTouch;$('#hud').classList.toggle('touch',isTouch);
+  renderPips();showScreen(null);$('#hud').hidden=false;applyTouch();
   startRound();
 }
 function startRound(){
@@ -1319,7 +1321,20 @@ function syncPlayerCtrl(){
   if(!p1)return;const c=p1.ctrl;
   c.left=!!(held.left||touchHeld.left);c.right=!!(held.right||touchHeld.right);c.down=!!(held.down||touchHeld.down);c.up=!!held.up;
 }
-const isTouch=!!(window.matchMedia&&(matchMedia('(pointer:coarse)').matches||matchMedia('(any-pointer:coarse)').matches))||('ontouchstart' in window);
+const isTouch=!!(window.matchMedia&&(matchMedia('(pointer:coarse)').matches||matchMedia('(any-pointer:coarse)').matches))||('ontouchstart' in window)||(navigator.maxTouchPoints>0);
+let touchPref=null;try{const v=localStorage.getItem('titanArenaTouch');if(v!==null)touchPref=v==='1';}catch(e){}
+let touchOn=touchPref!==null?touchPref:isTouch;
+function applyTouch(){
+  const show=touchOn&&G.mode==='fight'&&G.phase!=='over';
+  $('#touch').hidden=!show;$('#hud').classList.toggle('touch',touchOn);$('#touchBtn').classList.toggle('on',touchOn);
+  $('#touchBtn').textContent=touchOn?'TOUCH AAN':'TOUCH UIT';
+}
+function setTouch(on,remember){touchOn=on;if(remember){try{localStorage.setItem('titanArenaTouch',on?'1':'0');}catch(e){}}applyTouch();}
+// any real finger on the screen turns the on-screen controls on (unless the player switched them off)
+const autoTouch=e=>{if(!touchOn&&touchPref!==false&&(e.type==='touchstart'||e.pointerType==='touch'))setTouch(true,false);};
+window.addEventListener('touchstart',autoTouch,{passive:true,capture:true});
+window.addEventListener('pointerdown',autoTouch,{capture:true});
+$('#touchBtn').addEventListener('click',()=>{touchPref=!touchOn;setTouch(!touchOn,true);});
 const touchHeld={};
 document.querySelectorAll('#touch button').forEach(b=>{
   const k=b.dataset.k;
