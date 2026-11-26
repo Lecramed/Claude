@@ -18,7 +18,7 @@ Open `index.html` in een browser (Three.js wordt via cdnjs geladen, dus er is in
 | `I` | Super-aanval (100% reactor) |
 | `Esc` / `P` | Pauze |
 
-Op een touchscreen verschijnen knoppen op het scherm. Raakt een aanval, dan kun je hem direct afbreken in een zwaardere aanval (combo's).
+Op een touchscreen verschijnt een zwevende joystick: raak de linkerhelft van het scherm aan en duw opzij om te lopen, omhoog om te springen en omlaag om te blokkeren. Rechts staan de aanvalsknoppen. Raakt een aanval, dan kun je hem direct afbreken in een zwaardere aanval (combo's).
 
 ## Tegenstanders
 
