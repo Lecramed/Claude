@@ -2,6 +2,10 @@
 
 Een volledig statische, geanimeerde webshop over handbeschilderde stenen ("geschilderde stenen"). Gebouwd in vanilla HTML/CSS/JavaScript — geen build stap, geen dependencies.
 
+## Titan Arena (game)
+
+In de map [`mech-arena/`](mech-arena/) staat een losse 3D mech-vs-kaiju vechtgame. Zie [`mech-arena/README.md`](mech-arena/README.md).
+
 ## Bekijken
 
 Open gewoon `index.html` in een lokale webserver, bijvoorbeeld:
