@@ -1,0 +1,770 @@
+<title>Typtijdreis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: illustrated era scene as a banner on top, working panel (menu or typing) below, one 1040px column */
+:root {
+  --bg: #E7ECE4;
+  --panel: #FBFCF9;
+  --ink: #1F2620;
+  --muted: #5C675D;
+  --line: #CFD7CC;
+  --ember: #C9481A;
+  --ember-soft: #FBE0D2;
+  --on-ember: #FFFFFF;
+  --ok: #247A40;
+  --bad: #C22B2B;
+  --on-bad: #FFFFFF;
+  --gold: #D6930F;
+  --scrim: rgba(20, 26, 21, .55);
+  --shadow: rgba(30, 30, 20, .22);
+
+  --sky1: #8FCBE4; --sky2: #F5DDAE; --sun: #FFD36B; --cloud: rgba(255,255,255,.85); --smoke: rgba(90,80,75,.35);
+  --hill: #86AA72; --hill2: #6A905B; --ground: #C79F64; --ground2: #B48A50;
+  --volcano: #6A5A4F; --lava: #EE6A22;
+  --rock: #A59C91; --rock2: #7E756B; --cave: #2B221E;
+
+  --f-pink: #F3BCCB; --f-ring: #F5D68F; --f-mid: #AEDBB4; --f-idx: #A3CBF0; --f-thumb: #D8CEF2;
+  --key: #F3F5F0; --key-ink: #1F2620; --key-off: #E1E6DD;
+
+  --font-display: 'Lilita One', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121612; --panel: #1C221D; --ink: #E9EEE6; --muted: #A1ACA0; --line: #323B33;
+    --ember: #F2804A; --ember-soft: #4A2616; --on-ember: #1E0F07; --ok: #62C47F; --bad: #F06A6A; --on-bad: #1E0707; --gold: #F2BF4C;
+    --scrim: rgba(0,0,0,.65); --shadow: rgba(0,0,0,.45);
+    --sky1: #1B2747; --sky2: #6E4560; --sun: #F3EBC8; --cloud: rgba(200,200,230,.22); --smoke: rgba(200,180,170,.18);
+    --hill: #3E5939; --hill2: #2E452F; --ground: #6A5236; --ground2: #56422A;
+    --volcano: #3A302B; --lava: #FF7A2E;
+    --rock: #6F675F; --rock2: #554E47; --cave: #0E0B0A;
+    --f-pink: #6C3A49; --f-ring: #6A5523; --f-mid: #2E5D3A; --f-idx: #294D72; --f-thumb: #493E6D;
+    --key: #2A312B; --key-ink: #E9EEE6; --key-off: #181D19;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121612; --panel: #1C221D; --ink: #E9EEE6; --muted: #A1ACA0; --line: #323B33;
+  --ember: #F2804A; --ember-soft: #4A2616; --on-ember: #1E0F07; --ok: #62C47F; --bad: #F06A6A; --on-bad: #1E0707; --gold: #F2BF4C;
+  --scrim: rgba(0,0,0,.65); --shadow: rgba(0,0,0,.45);
+  --sky1: #1B2747; --sky2: #6E4560; --sun: #F3EBC8; --cloud: rgba(200,200,230,.22); --smoke: rgba(200,180,170,.18);
+  --hill: #3E5939; --hill2: #2E452F; --ground: #6A5236; --ground2: #56422A;
+  --volcano: #3A302B; --lava: #FF7A2E;
+  --rock: #6F675F; --rock2: #554E47; --cave: #0E0B0A;
+  --f-pink: #6C3A49; --f-ring: #6A5523; --f-mid: #2E5D3A; --f-idx: #294D72; --f-thumb: #493E6D;
+  --key: #2A312B; --key-ink: #E9EEE6; --key-off: #181D19;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: .01em; }
+p { margin: 0; }
+kbd { font-family: var(--font-mono); font-weight: 700; font-size: .9em; background: var(--key); color: var(--key-ink); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 6px; padding: 0 .4em; }
+
+.app { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; display: flex; flex-direction: column; gap: 16px; }
+
+/* Header */
+.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+.brand { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.logo { font-family: var(--font-display); font-size: 2.1rem; line-height: 1; }
+.logo span { color: var(--ember); }
+.tag { color: var(--muted); font-size: .92rem; }
+.eras { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.eras li { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); font-size: .74rem; line-height: 1.25; color: var(--muted); font-variant-numeric: tabular-nums; }
+.eras li b { display: block; font-size: .86rem; color: var(--ink); font-weight: 800; }
+.eras li.on { border-color: var(--ember); box-shadow: inset 0 -3px 0 var(--ember); }
+.eras li.lock { opacity: .55; }
+
+/* Scene */
+.scene { position: relative; container-type: inline-size; width: 100%; aspect-ratio: 1000 / 380; border-radius: 16px; overflow: hidden; background: linear-gradient(var(--sky1), var(--sky2) 72%); border: 1px solid var(--line); isolation: isolate; }
+.scene.shake { animation: shake .5s; }
+@keyframes shake { 20% { transform: translate(-6px, 2px); } 40% { transform: translate(6px, -2px); } 60% { transform: translate(-4px, 1px); } 80% { transform: translate(3px, 0); } }
+.land { position: absolute; inset: 0; width: 100%; height: 100%; }
+.land .volcano { fill: var(--volcano); } .land .lava { fill: var(--lava); }
+.land .hill2 { fill: var(--hill2); } .land .hill { fill: var(--hill); }
+.land .ground { fill: var(--ground); } .land .ground2 { fill: var(--ground2); }
+.sun { position: absolute; top: 9%; left: 9%; width: 6cqw; aspect-ratio: 1; border-radius: 50%; background: var(--sun); box-shadow: 0 0 4cqw var(--sun); }
+.cloud { position: absolute; height: 2.6cqw; border-radius: 3cqw; background: var(--cloud); animation: drift 80s linear infinite; }
+.cloud::before { content: ""; position: absolute; left: 22%; top: -55%; width: 40%; height: 120%; border-radius: 50%; background: inherit; }
+.c1 { top: 12%; left: 20%; width: 11cqw; } .c2 { top: 22%; left: 52%; width: 8cqw; animation-duration: 110s; animation-delay: -40s; }
+@keyframes drift { from { translate: -30cqw 0; } to { translate: 90cqw 0; } }
+.smoke { position: absolute; left: 70%; top: 21%; width: 3cqw; aspect-ratio: 1; border-radius: 50%; background: var(--smoke); filter: blur(.4cqw); animation: smoke 5s ease-out infinite; }
+.smoke.s2 { animation-delay: -1.7s; } .smoke.s3 { animation-delay: -3.4s; }
+@keyframes smoke { from { transform: translate(-50%, 0) scale(.6); opacity: .9; } to { transform: translate(-10%, -14cqw) scale(2.4); opacity: 0; } }
+.era-badge { position: absolute; top: 3.5%; right: 2%; background: var(--panel); color: var(--ink); border-radius: 999px; padding: .25em .8em; font-size: clamp(.68rem, 1.5cqw, .85rem); font-weight: 800; box-shadow: 0 2px 6px var(--shadow); z-index: 300; }
+
+.village { position: absolute; inset: 0; }
+.b { position: absolute; font-size: calc(var(--s) * 3.2cqw); line-height: 1; transform: translateX(-50%); transform-origin: 50% 100%; filter: drop-shadow(0 .08em 0 var(--shadow)); user-select: none; }
+.b.new { animation: pop .65s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes pop { from { transform: translateX(-50%) scale(0); } to { transform: translateX(-50%) scale(1); } }
+.b.crumble { animation: crumble .6s forwards; }
+@keyframes crumble { 30% { transform: translateX(-50%) rotate(-8deg); } to { transform: translateX(-50%) scale(1.3, 0); opacity: 0; } }
+.b.stone { filter: grayscale(1) contrast(.9) brightness(1.08) drop-shadow(0 .05em 0 var(--shadow)); }
+.b.cave { width: calc(var(--s) * 3.2cqw * 1.7); height: calc(var(--s) * 3.2cqw); font-size: 0; background: linear-gradient(var(--rock), var(--rock2)); border-radius: 50% 50% 8% 8% / 85% 85% 8% 8%; }
+.b.cave i { position: absolute; left: 33%; right: 33%; bottom: 0; height: 52%; background: var(--cave); border-radius: 50% 50% 0 0 / 75% 75% 0 0; }
+
+.dino { position: absolute; bottom: 5%; left: 112%; z-index: 200; font-size: calc(var(--s, 1.7) * 3.2cqw); line-height: 1; transform: translateX(-50%); transition: left .9s ease-in-out; user-select: none; filter: drop-shadow(0 .06em 0 var(--shadow)); }
+.dino.walk { animation: bob .28s ease-in-out infinite alternate; }
+.dino.flee { scale: -1 1; }
+.dino.boss { bottom: 3%; transition: left .25s linear; }
+@keyframes bob { to { translate: 0 -.07em; } }
+
+.toasts { position: absolute; top: 4%; left: 50%; transform: translateX(-50%); width: 70%; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; z-index: 400; }
+.toast { background: var(--panel); color: var(--ink); font-weight: 800; padding: .3em .9em; border-radius: 999px; font-size: clamp(.75rem, 1.8cqw, 1rem); box-shadow: 0 2px 10px var(--shadow); animation: toast 2.4s forwards; text-align: center; }
+.toast.ok { color: var(--ok); } .toast.bad { color: var(--bad); } .toast.gold { color: var(--ember); }
+@keyframes toast { 0% { opacity: 0; transform: translateY(-8px); } 10%, 80% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+
+/* Panels */
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.menu-head { display: flex; flex-direction: column; gap: 6px; max-width: 65ch; }
+.menu-head h1 { font-size: 1.9rem; line-height: 1.1; }
+.menu-head .aside { color: var(--muted); font-size: .88rem; }
+.lessons { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.lc { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: var(--bg); }
+.lc.boss { border-color: var(--ember); background: var(--ember-soft); }
+.lc.locked { opacity: .6; }
+.lc-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.nr { font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.stars { color: var(--gold); letter-spacing: .1em; font-size: 1.05rem; }
+.stars .e { color: var(--line); }
+.lc h3 { font-size: 1.35rem; line-height: 1.1; }
+.lc .keys { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: .9rem; color: var(--muted); }
+.lc .meta { font-size: .85rem; color: var(--muted); flex: 1; }
+.btn { font: 800 1rem var(--font-body); background: var(--ember); color: var(--on-ember); border: 0; border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: transform .1s; }
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn:disabled { cursor: not-allowed; background: var(--key-off); color: var(--muted); }
+.btn:focus-visible, .linkbtn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.foot { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: center; color: var(--muted); font-size: .85rem; }
+.linkbtn { background: none; border: 0; color: var(--muted); font: inherit; text-decoration: underline; cursor: pointer; padding: 0; }
+.linkbtn.warn { color: var(--bad); font-weight: 800; }
+.touch-note { display: none; padding: 10px 14px; border-radius: 10px; background: var(--ember-soft); font-weight: 600; }
+@media (pointer: coarse) { .touch-note { display: block; } }
+
+/* Play */
+.hud { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; }
+.hud-title { display: flex; flex-direction: column; min-width: 0; }
+.hud-title h2 { font-size: 1.5rem; line-height: 1.1; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: flex-end; }
+.stat { display: flex; flex-direction: column; gap: 2px; line-height: 1.1; }
+.stat small { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 800; }
+.stat b { font-family: var(--font-mono); font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.pips { display: flex; gap: 5px; height: 1.3rem; align-items: center; }
+.pip { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--bad); }
+.pip.on { background: var(--bad); }
+.bar { width: 120px; height: 12px; border-radius: 6px; background: var(--line); overflow: hidden; margin-block: 4px; }
+.bar i { display: block; height: 100%; background: var(--ok); transition: background .3s; }
+.bar.low i { background: var(--bad); }
+.msg { padding: 10px 14px; border-radius: 10px; background: var(--bg); min-height: 2.9em; }
+.msg.alert { background: var(--ember-soft); font-weight: 700; }
+.strip { font-family: var(--font-mono); font-weight: 500; font-size: clamp(1.3rem, 4.6vw, 2.3rem); display: flex; align-items: center; overflow: hidden; white-space: pre; padding: 18px 16px; border-radius: 12px; background: var(--bg); min-height: 2.6em; }
+.w { display: inline-flex; align-items: center; border-radius: 6px; }
+.w.done { opacity: .35; }
+.w.rescue { background: var(--ember-soft); padding: 0 .15em; color: var(--ember); font-weight: 700; }
+.w.rescue::before { content: "🦖"; font-size: .55em; margin-right: .2em; }
+.ch { display: inline-block; border-radius: 4px; }
+.ch.ok { color: var(--ok); }
+.ch.at { background: var(--ink); color: var(--bg); }
+.ch.at.err { background: var(--bad); color: var(--on-bad); }
+.sp { display: inline-block; width: .7em; height: 1.1em; border-radius: 3px; }
+.sp.at { box-shadow: inset 0 -.18em 0 var(--ink); }
+.sp.at.err { box-shadow: inset 0 -.18em 0 var(--bad); }
+.kb { --k: clamp(22px, 6.3vw, 48px); --g: clamp(3px, .9vw, 6px); display: flex; flex-direction: column; gap: var(--g); align-items: center; user-select: none; }
+.row { display: flex; gap: var(--g); }
+.row.r1 { margin-left: calc(var(--k) * -.5); } .row.r3 { margin-left: calc(var(--k) * .5); }
+.key { width: var(--k); height: var(--k); display: grid; place-items: center; position: relative; border-radius: calc(var(--k) * .18); background: var(--key); color: var(--key-ink); border: 1px solid var(--line); border-bottom-width: 3px; font-family: var(--font-mono); font-weight: 700; font-size: calc(var(--k) * .38); transition: transform .08s, background .1s; }
+.key.f-pink { background: var(--f-pink); } .key.f-ring { background: var(--f-ring); } .key.f-mid { background: var(--f-mid); } .key.f-idx { background: var(--f-idx); } .key.f-thumb { background: var(--f-thumb); }
+.key.off { background: var(--key-off); color: var(--muted); opacity: .55; }
+.key.bump::after { content: ""; position: absolute; bottom: 16%; width: 30%; height: 2px; border-radius: 2px; background: currentColor; opacity: .7; }
+.key.next { outline: 3px solid var(--ember); outline-offset: 2px; transform: translateY(-2px); }
+.key.bad { background: var(--bad); color: var(--on-bad); }
+.key.space { width: calc(var(--k) * 6); font-size: calc(var(--k) * .28); }
+.finger { text-align: center; color: var(--muted); min-height: 1.5em; }
+.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; font-size: .78rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); }
+
+/* Result */
+.overlay { position: fixed; inset: 0; z-index: 50; background: var(--scrim); display: grid; place-items: center; padding: 16px; }
+.card { width: 100%; max-width: 440px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 14px; text-align: center; box-shadow: 0 10px 40px var(--shadow); }
+.card h2 { font-size: 1.9rem; line-height: 1.1; }
+.bigstars { font-size: 2.6rem; letter-spacing: .12em; color: var(--gold); line-height: 1; }
+.bigstars .e { color: var(--line); }
+.rgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.rgrid div { background: var(--bg); border-radius: 10px; padding: 8px 4px; display: flex; flex-direction: column; gap: 2px; }
+.rgrid small { font-size: .66rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 800; }
+.rgrid b { font-family: var(--font-mono); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.tip { color: var(--muted); font-size: .92rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+@media (max-width: 560px) {
+  .panel { padding: 14px; }
+  .logo { font-size: 1.8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <span class="logo">Typ<span>tijd</span>reis</span>
+      <span class="tag">Leer blind typen en bouw je stad door de eeuwen heen.</span>
+    </div>
+    <ol class="eras" id="eras" aria-label="Tijdperken"></ol>
+  </header>
+
+  <section class="scene" id="scene" aria-label="Je dorp">
+    <div class="sun"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div>
+    <div class="smoke"></div><div class="smoke s2"></div><div class="smoke s3"></div>
+    <svg class="land" viewBox="0 0 1000 380" preserveAspectRatio="none" aria-hidden="true">
+      <path class="volcano" d="M540 262 L672 86 L728 86 L880 262 Z"/>
+      <path class="lava" d="M672 86 L688 104 L700 94 L714 108 L728 86 Z"/>
+      <path class="hill2" d="M0 250 Q140 175 300 232 T620 228 T1000 214 V380 H0 Z"/>
+      <path class="hill" d="M0 272 Q210 222 440 258 T1000 248 V380 H0 Z"/>
+      <path class="ground" d="M0 262 Q500 236 1000 262 V380 H0 Z"/>
+      <path class="ground2" d="M0 330 Q300 312 620 330 T1000 324 V380 H0 Z"/>
+    </svg>
+    <div class="village" id="village"></div>
+    <div class="dino" id="dino" hidden>🦖</div>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+    <div class="era-badge">Oertijd · ± 10.000 v.Chr.</div>
+  </section>
+
+  <section class="panel" id="menu">
+    <div class="menu-head">
+      <h1>Tijdperk 1: de oertijd</h1>
+      <p>Bouw een stenen dorp met de thuisrij van je toetsenbord. Elke 3 goede woorden zet je een nieuw gebouw neer. Maak je fouten, dan sluipen er raptors naar je dorp. Verjaag ze voordat ze iets vertrappen.</p>
+      <p class="aside">Ja, eigenlijk waren de dino's al 66 miljoen jaar uitgestorven toen de eerste mensen kwamen. In Typtijdreis niet.</p>
+    </div>
+    <p class="touch-note">Deze cursus werkt met een echt toetsenbord. Sluit er een aan of speel op een computer.</p>
+    <div class="lessons" id="lessons"></div>
+    <div class="foot">
+      <span>Tip: druk tijdens een les op <kbd>Esc</kbd> om te stoppen.</span>
+      <button class="linkbtn" id="reset" type="button">Voortgang wissen</button>
+    </div>
+  </section>
+
+  <section class="panel" id="play" hidden>
+    <div class="hud">
+      <div class="hud-title"><span class="nr" id="pNr"></span><h2 id="pTitle"></h2></div>
+      <div class="stats" id="stats"></div>
+      <button class="btn ghost" id="quit" type="button">Stoppen</button>
+    </div>
+    <p class="msg" id="msg"></p>
+    <div class="strip" id="strip" aria-live="off"></div>
+    <div class="kb" id="kb" aria-hidden="true"></div>
+    <p class="finger" id="finger"></p>
+    <div class="legend" aria-hidden="true">
+      <span><i style="background:var(--f-pink)"></i>pink</span>
+      <span><i style="background:var(--f-ring)"></i>ringvinger</span>
+      <span><i style="background:var(--f-mid)"></i>middelvinger</span>
+      <span><i style="background:var(--f-idx)"></i>wijsvinger</span>
+      <span><i style="background:var(--f-thumb)"></i>duim</span>
+    </div>
+  </section>
+
+  <div class="overlay" id="result" hidden role="dialog" aria-modal="true" aria-labelledby="rTitle">
+    <div class="card">
+      <h2 id="rTitle"></h2>
+      <div class="bigstars" id="rStars"></div>
+      <p id="rText"></p>
+      <div class="rgrid" id="rGrid"></div>
+      <p class="tip" id="rTip"></p>
+      <div class="actions" id="rActions"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const STORE = 'typtijdreis-v1';
+
+const ERAS = [
+  { n: 'Oertijd', y: '± 10.000 v.Chr.' },
+  { n: 'Romeinen', y: '± 100 n.Chr.' },
+  { n: 'Middeleeuwen', y: '± 1300' },
+  { n: 'Heden', y: '2026' },
+  { n: 'Toekomst', y: '± 2300' },
+];
+
+const LESSONS = [
+  {
+    id: 'l1', nr: 'Les 1', name: 'Eerste vuur', newKeys: 'fjdk', keys: 'fjdk', target: 8, count: 24,
+    intro: 'Leg je wijsvingers op F en J. Voel je de streepjes? Je middelvingers rusten op D en K, je duimen op de spatiebalk.',
+    pool: ['ff', 'jj', 'dd', 'kk', 'fj', 'jf', 'dk', 'kd', 'fd', 'jk', 'df', 'kj', 'fjfj', 'dkdk', 'fdjk', 'kjdf', 'ffjj', 'ddkk', 'jfkd', 'dfjk'],
+    rescue: 'jfjf', rescueMsg: 'Gooi stenen!',
+    buildings: [
+      { e: '🔥', n: 'Kampvuur', x: 31, y: 6, s: 1.2 },
+      { e: '🪵', n: 'Houtstapel', x: 39, y: 5, s: .9 },
+      { e: '🛖', n: 'Hut', x: 25, y: 29, s: 1.6 },
+      { e: '🪨', n: 'Steenhoop', x: 36, y: 30, s: .9 },
+      { e: '🌳', n: 'Schaduwboom', x: 3.5, y: 27, s: 2 },
+      { e: '🍖', n: 'Vleesrek', x: 46, y: 8, s: .9 },
+    ],
+  },
+  {
+    id: 'l2', nr: 'Les 2', name: 'De grot', newKeys: 'asl', keys: 'asdfjkl', target: 10, count: 24,
+    intro: 'Nieuw: A met je linker pink, S met je linker ringvinger en L met je rechter ringvinger. Houd je wijsvingers op F en J.',
+    pool: ['als', 'las', 'sla', 'kas', 'das', 'dal', 'dak', 'lak', 'jas', 'kaal', 'kaas', 'kalf', 'laf', 'ja', 'al', 'af', 'sjaal', 'klas', 'alfa', 'jakkals', 'asdf', 'lkj'],
+    rescue: 'sla', rescueMsg: 'Sla hem weg!',
+    buildings: [
+      { e: 'cave', n: 'Grot', x: 12, y: 28, s: 2.4 },
+      { e: '🏺', n: 'Voorraadpot', x: 15, y: 5, s: .9 },
+      { e: '🪓', n: 'Werkplaats', x: 45, y: 30, s: 1 },
+      { e: '🐐', n: 'Geitje', x: 54, y: 6, s: 1.1 },
+      { e: '🌾', n: 'Graanveldje', x: 55, y: 30, s: 1.1 },
+      { e: '🛖', n: 'Tweede hut', x: 22, y: 4, s: 1.5 },
+    ],
+  },
+  {
+    id: 'l3', nr: 'Les 3', name: 'De stam', newKeys: 'gh', keys: 'asdfghjkl', target: 12, count: 24,
+    intro: 'Nieuw: G (linker wijsvinger schuift één toets naar rechts) en H (rechter wijsvinger schuift naar links). Ga daarna meteen terug naar F en J.',
+    pool: ['dag', 'gas', 'gal', 'hak', 'hal', 'hals', 'half', 'glas', 'slag', 'slak', 'laag', 'haal', 'haas', 'jaag', 'gaaf', 'had', 'haha', 'sjaal', 'fgf', 'jhj', 'fgjh', 'kaas', 'jakkals'],
+    rescue: 'jaag', rescueMsg: 'Jaag hem weg!',
+    buildings: [
+      { e: '🗿', n: 'Stambeeld', x: 64, y: 30, s: 1.3 },
+      { e: '🦣', n: 'Mammoet', x: 71, y: 5, s: 1.9 },
+      { e: '🥁', n: 'Trommel', x: 62, y: 7, s: .9 },
+      { e: '⛺', n: 'Leiderstent', x: 73, y: 31, s: 1.2 },
+      { e: '🐺', n: 'Tamme wolf', x: 7, y: 5, s: 1 },
+      { e: '🛶', n: 'Kano', x: 81, y: 30, s: 1.1 },
+    ],
+  },
+  {
+    id: 'boss', nr: 'Eindbaas', name: 'De T-rex', boss: true, keys: 'asdfghjkl', target: 12, count: 20,
+    intro: 'De T-rex stampt op je dorp af! Elk goed woord drijft hem terug, elke fout brengt hem dichterbij. Typ 20 woorden voordat hij het dorp bereikt.',
+    pool: ['kaas', 'sjaal', 'jakkals', 'glas', 'slag', 'slak', 'haas', 'half', 'hals', 'kalf', 'laag', 'haal', 'jaag', 'gaaf', 'klas', 'alfa', 'dag', 'gas', 'hak', 'dak', 'das', 'kaal', 'lak', 'jas'],
+    buildings: [{ e: '🦖', n: 'Stenen T-rex-beeld', x: 90, y: 27, s: 2, stone: true }],
+  },
+];
+
+const FINGER = { a: 'lp', q: 'lp', z: 'lp', s: 'lr', w: 'lr', x: 'lr', d: 'lm', e: 'lm', c: 'lm', f: 'li', g: 'li', r: 'li', t: 'li', v: 'li', b: 'li', h: 'ri', j: 'ri', y: 'ri', u: 'ri', n: 'ri', m: 'ri', k: 'rm', i: 'rm', ',': 'rm', l: 'rr', o: 'rr', '.': 'rr', ';': 'rp', p: 'rp', '/': 'rp', ' ': 'th' };
+const FNAME = { lp: 'linker pink', lr: 'linker ringvinger', lm: 'linker middelvinger', li: 'linker wijsvinger', ri: 'rechter wijsvinger', rm: 'rechter middelvinger', rr: 'rechter ringvinger', rp: 'rechter pink', th: 'duim' };
+const FCLASS = { lp: 'f-pink', rp: 'f-pink', lr: 'f-ring', rr: 'f-ring', lm: 'f-mid', rm: 'f-mid', li: 'f-idx', ri: 'f-idx', th: 'f-thumb' };
+const ROWS = ['qwertyuiop', 'asdfghjkl;', 'zxcvbnm,./'];
+
+/* ---------- opslag ---------- */
+function load() {
+  try { const s = JSON.parse(localStorage.getItem(STORE)); if (s && s.stars && s.built) return s; } catch (e) {}
+  return { stars: {}, built: {}, boss: false };
+}
+function persist() { try { localStorage.setItem(STORE, JSON.stringify(save)); } catch (e) {} }
+let save = load();
+
+/* ---------- staat ---------- */
+let G = null;
+let view = 'menu';
+const village = $('#village');
+const dino = $('#dino');
+const scene = $('#scene');
+
+/* ---------- dorp ---------- */
+function villageCount(L) {
+  if (G && view === 'play' && G.L.id === L.id) return G.built;
+  return save.built[L.id] || 0;
+}
+function renderVillage(newId) {
+  const out = [];
+  for (const L of LESSONS) {
+    const n = villageCount(L);
+    for (let k = 0; k < n; k++) {
+      const b = L.buildings[k];
+      const id = L.id + '-' + k;
+      const cls = 'b' + (b.e === 'cave' ? ' cave' : '') + (b.stone ? ' stone' : '') + (id === newId ? ' new' : '');
+      out.push(`<span class="${cls}" data-id="${id}" title="${b.n}" style="left:${b.x}%;bottom:${b.y}%;--s:${b.s};z-index:${Math.round(100 - b.y)}">${b.e === 'cave' ? '<i></i>' : b.e}</span>`);
+    }
+  }
+  village.innerHTML = out.join('');
+}
+function toast(text, kind = '') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + kind;
+  t.textContent = text;
+  $('#toasts').appendChild(t);
+  const all = $('#toasts').children;
+  if (all.length > 3) all[0].remove();
+  setTimeout(() => t.remove(), 2400);
+}
+function shake() { scene.classList.remove('shake'); void scene.offsetWidth; scene.classList.add('shake'); }
+
+/* ---------- dino ---------- */
+function dinoTo(x, s) {
+  if (dino.hidden) { dino.style.left = '112%'; dino.hidden = false; void dino.offsetWidth; }
+  dino.style.setProperty('--s', s);
+  dino.style.left = x + '%';
+  dino.classList.add('walk');
+}
+function hideDino() { dino.hidden = true; dino.className = 'dino'; dino.style.left = '112%'; }
+function placeRaptor() { dino.classList.remove('flee', 'boss'); dinoTo(G.threat === 1 ? 94 : 86, 1.7); }
+function chaseDino() { dino.classList.add('flee'); dinoTo(114, 1.7); }
+function positionTrex() {
+  dino.classList.add('boss'); dino.classList.remove('flee');
+  dinoTo(28 + G.p * 0.62, 4.2);
+  const bar = $('#tBar');
+  if (bar) { bar.firstElementChild.style.width = G.p + '%'; bar.classList.toggle('low', G.p < 30); }
+}
+
+/* ---------- menu ---------- */
+function starStr(n) { let s = ''; for (let i = 0; i < 3; i++) s += i < n ? '★' : '<span class="e">★</span>'; return s; }
+function unlocked(idx) { return idx === 0 || (save.stars[LESSONS[idx - 1].id] || 0) > 0; }
+function renderEras() {
+  $('#eras').innerHTML = ERAS.map((e, i) => {
+    if (i === 0) return `<li class="on"><b>${e.n}${save.boss ? ' ✓' : ''}</b>${e.y}</li>`;
+    return `<li class="lock"><b>${e.n}</b>${e.y} · binnenkort</li>`;
+  }).join('');
+}
+function renderLessons() {
+  let firstOpen = LESSONS.findIndex((L, i) => unlocked(i) && !(save.stars[L.id] > 0));
+  $('#lessons').innerHTML = LESSONS.map((L, i) => {
+    const ok = unlocked(i), st = save.stars[L.id] || 0;
+    const keys = L.boss
+      ? 'Alle toetsen van de thuisrij'
+      : 'Nieuw: ' + L.newKeys.split('').map(k => `<kbd>${k.toUpperCase()}</kbd>`).join('');
+    const meta = L.boss
+      ? (save.boss ? 'Verslagen! Het stenen beeld staat in je dorp.' : 'Houd de T-rex 20 woorden lang tegen.')
+      : `Gebouwen: ${save.built[L.id] || 0} van 6 · ★★★ bij 95% nauwkeurig en ${L.target} wpm`;
+    const label = !ok ? '🔒 Eerst ' + LESSONS[i - 1].nr : st ? 'Opnieuw spelen' : 'Start';
+    const ghost = ok && i !== firstOpen ? ' ghost' : '';
+    return `<article class="lc${L.boss ? ' boss' : ''}${ok ? '' : ' locked'}">
+      <div class="lc-top"><span class="nr">${L.nr}</span><span class="stars" aria-label="${st} van 3 sterren">${starStr(st)}</span></div>
+      <h3>${L.name}</h3>
+      <p class="keys">${keys}</p>
+      <p class="meta">${meta}</p>
+      <button class="btn${ghost}" type="button" data-start="${L.id}" ${ok ? '' : 'disabled'}>${label}</button>
+    </article>`;
+  }).join('');
+}
+function showMenu() {
+  if (G) { G.over = true; cancelAnimationFrame(G.raf); }
+  G = null; view = 'menu';
+  $('#menu').hidden = false; $('#play').hidden = true; $('#result').hidden = true;
+  hideDino(); renderEras(); renderLessons(); renderVillage();
+}
+$('#lessons').addEventListener('click', e => {
+  const b = e.target.closest('[data-start]');
+  if (b && !b.disabled) startLesson(b.dataset.start);
+});
+let resetArmed = false;
+$('#reset').addEventListener('click', () => {
+  const r = $('#reset');
+  if (!resetArmed) {
+    resetArmed = true; r.textContent = 'Weet je het zeker? Klik nogmaals om alles te wissen'; r.classList.add('warn');
+    setTimeout(() => { resetArmed = false; r.textContent = 'Voortgang wissen'; r.classList.remove('warn'); }, 4000);
+    return;
+  }
+  save = { stars: {}, built: {}, boss: false }; persist();
+  resetArmed = false; r.textContent = 'Voortgang wissen'; r.classList.remove('warn');
+  showMenu(); toast('Voortgang gewist. Een nieuw begin!', 'gold');
+});
+
+/* ---------- les ---------- */
+function makeItems(L) {
+  const out = []; let prev = '';
+  while (out.length < L.count) {
+    const w = L.pool[Math.floor(Math.random() * L.pool.length)];
+    if (w === prev) continue;
+    prev = w; out.push({ t: w, r: false });
+  }
+  return out;
+}
+function startLesson(id) {
+  const L = LESSONS.find(l => l.id === id);
+  if (G) cancelAnimationFrame(G.raf);
+  G = { L, items: makeItems(L), i: 0, c: 0, errAt: false, correct: 0, errors: 0, combo: 0, best: 0, start: null, end: null, built: 0, threat: 0, p: 100, words: 0, over: false, raf: 0 };
+  view = 'play';
+  $('#menu').hidden = true; $('#play').hidden = false; $('#result').hidden = true;
+  if (document.activeElement) document.activeElement.blur();
+  $('#pNr').textContent = L.nr; $('#pTitle').textContent = L.name;
+  $('#stats').innerHTML = `
+    <div class="stat"><small>Snelheid</small><b id="sWpm">–</b></div>
+    <div class="stat"><small>Nauwkeurig</small><b id="sAcc">100%</b></div>
+    <div class="stat"><small>Combo</small><b id="sCombo">0</b></div>
+    <div class="stat"><small>${L.boss ? 'Woorden' : 'Gebouwd'}</small><b id="sProg"></b></div>
+    ${L.boss
+      ? '<div class="stat"><small>Afstand T-rex</small><div class="bar" id="tBar"><i style="width:100%"></i></div></div>'
+      : '<div class="stat"><small>Dreiging</small><div class="pips" id="pips"><span class="pip"></span><span class="pip"></span><span class="pip"></span></div></div>'}`;
+  buildKb();
+  hideDino();
+  renderVillage();
+  if (L.boss) positionTrex();
+  renderAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function target() {
+  const it = G.items[G.i];
+  return it.t + (G.i < G.items.length - 1 ? ' ' : '');
+}
+function speed() {
+  if (!G || !G.start) return 0;
+  const mins = ((G.end || performance.now()) - G.start) / 60000;
+  return mins > 0 ? Math.round(G.correct / 5 / mins) : 0;
+}
+function accuracy() {
+  const t = G.correct + G.errors;
+  return t ? Math.round(G.correct / t * 100) : 100;
+}
+
+document.addEventListener('keydown', e => {
+  if (!$('#result').hidden) {
+    if (e.key === 'Enter') { e.preventDefault(); const b = $('#rActions .btn'); if (b) b.click(); }
+    return;
+  }
+  if (!G || G.over || view !== 'play') return;
+  if (e.key === 'Escape') { showMenu(); return; }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key.length !== 1) return;
+  e.preventDefault();
+  const key = e.key.toLowerCase();
+  const tgt = target();
+  const exp = tgt[G.c];
+  if (G.start === null) { G.start = performance.now(); if (G.L.boss) startBoss(); }
+  if (key === exp) {
+    G.c++; G.correct++; G.combo++;
+    if (G.combo > G.best) G.best = G.combo;
+    if (G.combo % 30 === 0) toast(`Combo ${G.combo}! Lekker bezig`, 'gold');
+    if (G.c >= tgt.length) completeItem();
+  } else {
+    flashKey(key);
+    if (!G.errAt) { G.errAt = true; G.errors++; G.combo = 0; onError(); }
+  }
+  if (G && !G.over) renderAll();
+});
+
+function completeItem() {
+  const it = G.items[G.i];
+  if (it.r) {
+    G.threat = 0; chaseDino(); toast('Raptor verjaagd!', 'ok');
+  } else {
+    G.words++;
+    if (G.L.boss) { G.p = Math.min(100, G.p + 4.5); positionTrex(); }
+    else if (G.words % 3 === 0) build();
+  }
+  G.i++; G.c = 0; G.errAt = false;
+  if (G.i >= G.items.length) finish(true);
+}
+function build() {
+  if (G.built < G.L.buildings.length) {
+    G.built++;
+    const b = G.L.buildings[G.built - 1];
+    renderVillage(G.L.id + '-' + (G.built - 1));
+    toast('Gebouwd: ' + b.n, 'ok');
+  } else {
+    toast('Je dorp bloeit!', 'ok');
+  }
+}
+function onError() {
+  if (G.L.boss) {
+    G.p = Math.max(0, G.p - 5); positionTrex();
+    if (G.p <= 0) finish(false);
+    return;
+  }
+  G.threat++;
+  if (G.threat >= 3) { attack(); return; }
+  placeRaptor();
+  const pending = G.items.some((it, k) => k >= G.i && it.r);
+  if (!pending) G.items.splice(G.i + 1, 0, { t: G.L.rescue, r: true });
+}
+function attack() {
+  const g = G;
+  g.threat = 0;
+  g.items = g.items.filter((it, k) => !(k > g.i && it.r));
+  dino.classList.remove('flee', 'boss');
+  const tb = g.built > 0 ? g.L.buildings[g.built - 1] : null;
+  dinoTo(tb ? tb.x + 3 : 45, 1.7);
+  setTimeout(() => {
+    if (G !== g || g.over) return;
+    if (g.built > 0) {
+      const b = g.L.buildings[g.built - 1];
+      const el = village.querySelector(`[data-id="${g.L.id}-${g.built - 1}"]`);
+      g.built--;
+      if (el) el.classList.add('crumble');
+      toast(`Een raptor vertrapt je ${b.n.toLowerCase()}!`, 'bad');
+      setTimeout(() => { if (G === g) renderVillage(); }, 600);
+    } else {
+      toast('Een raptor rent dwars door je dorp!', 'bad');
+    }
+    shake(); chaseDino(); renderAll();
+  }, 900);
+}
+function startBoss() {
+  const g = G;
+  let last = performance.now();
+  const tick = now => {
+    if (G !== g || g.over) return;
+    const dt = Math.min(.1, (now - last) / 1000); last = now;
+    g.p -= dt * (100 / 90);
+    if (g.p <= 0) { g.p = 0; positionTrex(); finish(false); return; }
+    positionTrex();
+    g.raf = requestAnimationFrame(tick);
+  };
+  g.raf = requestAnimationFrame(tick);
+}
+
+function finish(win) {
+  const g = G;
+  g.over = true; g.end = performance.now(); cancelAnimationFrame(g.raf);
+  const L = g.L, wpm = speed(), acc = accuracy();
+  let stars;
+  if (L.boss) stars = win ? (acc >= 95 ? 3 : acc >= 85 ? 2 : 1) : 0;
+  else stars = (acc >= 95 && wpm >= L.target) ? 3 : acc >= 85 ? 2 : 1;
+  if (win) {
+    save.stars[L.id] = Math.max(save.stars[L.id] || 0, stars);
+    if (L.boss) { save.boss = true; save.built.boss = 1; g.built = 1; }
+    else save.built[L.id] = Math.max(save.built[L.id] || 0, g.built);
+    persist();
+  }
+  renderAll();
+  if (L.boss && win) {
+    chaseDino(); renderVillage('boss-0');
+    toast('De T-rex vlucht!', 'ok');
+  } else if (L.boss) {
+    shake(); toast('ROOOAAAR!', 'bad');
+  } else {
+    hideDino();
+  }
+  setTimeout(() => { if (G === g) showResult(win, stars, wpm, acc); }, L.boss ? 1300 : 700);
+}
+
+function showResult(win, stars, wpm, acc) {
+  const L = G.L;
+  const idx = LESSONS.indexOf(L);
+  const next = LESSONS[idx + 1];
+  let title, text;
+  if (L.boss && win) {
+    title = 'Het dorp is gered!';
+    text = 'Je hebt de oertijd voltooid. Een stenen T-rex-beeld herinnert voortaan aan je overwinning. Volgend tijdperk: de Romeinen (binnenkort).';
+  } else if (L.boss) {
+    title = 'De T-rex was te snel';
+    text = 'Geen zorgen, je dorp staat er nog. Rustig en foutloos typen houdt hem beter tegen dan haasten.';
+  } else {
+    title = stars === 3 ? 'Perfecte les!' : 'Les voltooid!';
+    text = `Er staan nu ${G.built} van de 6 gebouwen.` + (G.built < 6 ? ' Raptors hebben de rest vertrapt. Minder fouten betekent meer gebouwen.' : ' Je dorp is compleet.');
+  }
+  let tip;
+  if (L.boss && !win) tip = 'Tip: speel les 3 nog eens om sneller te worden.';
+  else if (acc < 95) tip = 'Tip: typ iets langzamer. Eerst nauwkeurig, de snelheid komt vanzelf.';
+  else if (wpm < L.target) tip = `Tip: je typt al nauwkeurig. Probeer ${L.target} wpm te halen voor de derde ster.`;
+  else tip = 'Drie sterren. Je vingers weten de weg!';
+
+  $('#rTitle').textContent = title;
+  $('#rStars').innerHTML = starStr(stars);
+  $('#rStars').setAttribute('aria-label', `${stars} van 3 sterren`);
+  $('#rText').textContent = text;
+  $('#rGrid').innerHTML = `
+    <div><small>Snelheid</small><b>${wpm} wpm</b></div>
+    <div><small>Nauwkeurig</small><b>${acc}%</b></div>
+    <div><small>Beste combo</small><b>${G.best}</b></div>`;
+  $('#rTip').textContent = tip;
+  const acts = [];
+  if (win && next) acts.push(`<button class="btn" type="button" data-go="${next.id}">Verder: ${next.nr}</button>`);
+  if (!win) acts.push(`<button class="btn" type="button" data-go="${L.id}">Opnieuw proberen</button>`);
+  else acts.push(`<button class="btn${next ? ' ghost' : ''}" type="button" data-go="${L.id}">Opnieuw spelen</button>`);
+  acts.push(`<button class="btn ghost" type="button" data-go="menu">Naar het overzicht</button>`);
+  if (win && !next) acts.reverse();
+  $('#rActions').innerHTML = acts.join('');
+  $('#result').hidden = false;
+  $('#rActions .btn').focus();
+}
+$('#rActions').addEventListener('click', e => {
+  const b = e.target.closest('[data-go]'); if (!b) return;
+  $('#result').hidden = true;
+  if (b.dataset.go === 'menu') showMenu(); else startLesson(b.dataset.go);
+});
+$('#quit').addEventListener('click', showMenu);
+
+/* ---------- weergave tijdens les ---------- */
+function buildKb() {
+  const keys = G.L.keys;
+  const rows = ROWS.map((r, ri) => `<div class="row r${ri + 1}">` + r.split('').map(ch => {
+    const on = keys.includes(ch);
+    const cls = 'key ' + (on ? FCLASS[FINGER[ch]] : 'off') + (ch === 'f' || ch === 'j' ? ' bump' : '');
+    return `<div class="${cls}" data-k="${ch}">${ch.toUpperCase()}</div>`;
+  }).join('') + '</div>');
+  rows.push('<div class="row"><div class="key space f-thumb" data-k=" ">spatie</div></div>');
+  $('#kb').innerHTML = rows.join('');
+}
+function flashKey(k) {
+  const el = $('#kb').querySelector(`[data-k="${CSS.escape(k)}"]`);
+  if (!el) return;
+  el.classList.add('bad');
+  setTimeout(() => el.classList.remove('bad'), 220);
+}
+function renderStrip() {
+  const start = Math.max(0, G.i - 1);
+  const end = Math.min(G.items.length, start + 9);
+  const parts = [];
+  for (let k = start; k < end; k++) {
+    const it = G.items[k];
+    const cur = k === G.i && !G.over;
+    const cls = 'w' + (it.r ? ' rescue' : '') + (k < G.i ? ' done' : '');
+    let inner = '';
+    for (let n = 0; n < it.t.length; n++) {
+      let c = 'ch';
+      if (cur) { if (n < G.c) c += ' ok'; else if (n === G.c) c += ' at' + (G.errAt ? ' err' : ''); }
+      inner += `<span class="${c}">${it.t[n]}</span>`;
+    }
+    parts.push(`<span class="${cls}">${inner}</span>`);
+    if (k < G.items.length - 1) {
+      const at = cur && G.c === it.t.length;
+      parts.push(`<span class="sp${at ? ' at' + (G.errAt ? ' err' : '') : ''}"></span>`);
+    }
+  }
+  $('#strip').innerHTML = parts.join('');
+}
+function renderKbHint() {
+  $('#kb').querySelectorAll('.next').forEach(el => el.classList.remove('next'));
+  if (G.over) { $('#finger').textContent = ''; return; }
+  const exp = target()[G.c];
+  const el = $('#kb').querySelector(`[data-k="${CSS.escape(exp)}"]`);
+  if (el) el.classList.add('next');
+  $('#finger').innerHTML = exp === ' '
+    ? 'Volgende: <kbd>spatie</kbd> met je duim'
+    : `Volgende: <kbd>${exp.toUpperCase()}</kbd> met je ${FNAME[FINGER[exp]]}`;
+}
+function renderStats() {
+  $('#sWpm').textContent = G.start && performance.now() - G.start > 4000 ? speed() : '–';
+  $('#sAcc').textContent = accuracy() + '%';
+  $('#sCombo').textContent = G.combo;
+  if (G.L.boss) {
+    $('#sProg').textContent = `${G.words}/${G.L.count}`;
+  } else {
+    $('#sProg').textContent = `${G.built}/6`;
+    $('#pips').querySelectorAll('.pip').forEach((p, i) => p.classList.toggle('on', i < G.threat));
+  }
+}
+function renderMsg() {
+  const m = $('#msg');
+  const L = G.L;
+  if (!L.boss && G.items.some((it, k) => k >= G.i && it.r)) {
+    const left = 3 - G.threat;
+    m.className = 'msg alert';
+    m.innerHTML = `🦖 Een raptor sluipt naar je dorp! ${L.rescueMsg} Typ <kbd>${L.rescue}</kbd> om hem te verjagen. Nog ${left} fout${left === 1 ? '' : 'en'} en hij valt aan.`;
+  } else if (!G.start) {
+    m.className = 'msg';
+    m.textContent = L.intro + ' Begin met typen zodra je klaar bent.';
+  } else {
+    m.className = 'msg';
+    m.textContent = L.boss
+      ? 'Blijf rustig typen. Elke fout brengt de T-rex dichterbij.'
+      : 'Kijk naar het scherm, niet naar je handen. Elke 3 goede woorden bouw je iets nieuws.';
+  }
+}
+function renderAll() {
+  if (!G) return;
+  renderStrip(); renderKbHint(); renderStats(); renderMsg();
+}
+setInterval(() => { if (G && !G.over && G.start && view === 'play') $('#sWpm').textContent = performance.now() - G.start > 4000 ? speed() : '–'; }, 500);
+
+showMenu();
+})();
+</script>
